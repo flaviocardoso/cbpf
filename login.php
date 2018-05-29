@@ -24,6 +24,11 @@
                 <br/><br/>
                 <input type="submit" value="Enviar"/>
             </form>
+            <p>
+                <?php
+                include("cadastro.php");
+                ?>
+            </p>
         </section>
     </body>
 </html>
