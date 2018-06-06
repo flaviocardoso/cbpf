@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta content="width=device-width, initial-scale=1 maxium-scale=1" name="viewport">
+        <meta content="width=device-width, initial-scale=1 maximum-scale=1" name="viewport">
         <title>Cadrastro - Teste de nível de permissões - Inclusão no banco de dados</title>
     </head>
     <body>
@@ -11,7 +11,16 @@
         </header>
         <section>
             <div align="center">
-                <form action="valida.php" method="post">
+                <p>
+                  <?php
+                  $dt = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+                  echo $dt->format('Y-m-d H:i:s');
+                  ?>
+                </p>
+                <p>
+
+                </p>
+                <form action="inserir.php" method="post">
                 <div>
                     <table>
                         <tr>
@@ -46,7 +55,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td><p></p></td><td></td>
+                            <td></td><td></td>
                         </tr>
                         <tr>
                             <td align="right">Senha : </td>
@@ -56,14 +65,16 @@
                             <td align="right">Repita a Senha : </td>
                             <td><input name="c_senha" type="password" placeholder="Repita a senha" required /></td>
                         </tr>
+                        <tr>
+                            <td></td><td><p><a href="http://localhost:8080/cbpf/login.php">Já tem login?</a></p></td>
+                        </tr>
                     </table>
                     <br/>
                     <input type="submit" name="submit" value="Enviar"/>
                     <input type="reset" value="Limpar"/>
-                </div>                
+                </div>
                 </form>
             </div>
-            
         </section>
     </body>
 </html>

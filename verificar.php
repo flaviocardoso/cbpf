@@ -1,0 +1,40 @@
+<?php
+include("conexao.php");
+include("biblio.php");
+
+
+$user = entrada($_POST['user']);
+$senha = entrada($_POST['senha']);
+
+try{
+  $sql_user = "SELECT nome, user, setor, senha, nivel FROM usuario where user=:user";
+  $stmt = $PDO->prepare($sql_user);
+  $stmt->bindParam(':user', $user, PDO::PARAM_STR);
+  $stmt->execute();
+
+  $result = $stmt->rowCount();
+
+  if($result > 0){
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if($row['user'] == $user && $row['senha'] == $senha){
+      echo "Login com sucesso";
+
+      session_start();
+      $_SESSION['user'] = $row['user'];
+      $_SESSION['nome'] = $row['nome'];
+      $_SESSION['setor'] = setor($row['setor']);
+      $_SESSION['nivel'] = $row['nivel'];
+      header("Location: principal.php");
+    }else{
+      echo "Login ou senha incorretos";
+      header("Location:login.php?err=1");exit;
+    }
+  }else{
+    echo "Login não encontrado";
+    header("Location: login.php?err=2");exit;
+  }
+}catch(PDOException $e){
+  echo "ERROR: " . $e->getMessage();
+}
+
+ ?>

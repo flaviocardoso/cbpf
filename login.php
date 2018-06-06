@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <meta content="width=device-width initial-scale=1 maxium-scale=1" name="viewport">
+        <meta content="width=device-width initial-scale=1 maximum-scale=1" name="viewport">
         <title>Login</title>
     </head>
     <body>
@@ -10,7 +10,7 @@
             <p>Login</p>
         </header>
         <section>
-            <form action="valida.php" method="post">
+            <form action="verificar.php" method="post">
                 <table>
                     <tr>
                         <td align="right">Login : </td>
@@ -18,7 +18,10 @@
                     </tr>
                     <tr>
                         <td align="right">Senha : </td>
-                        <td><input name="senha" type="password" requid/></td>
+                        <td>
+                          <input name="senha" type="password" requid/>
+                          <a href="http://localhost:8080/cbpf/cadastro.php">Não tem login? Cadastre-se!</a>
+                        </td>
                     </tr>
                 </table>
                 <br/><br/>
@@ -26,7 +29,7 @@
             </form>
             <p>
                 <?php
-                include("cadastro.php");
+                #include("cadastro.php");
                 ?>
             </p>
         </section>
