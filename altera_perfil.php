@@ -2,7 +2,7 @@
 include("conxecao.php");
 include("biblio.php");
 session_start();
-$user = entrada($_SESSION['user']);
+$user = $_SESSION['user'];
 $nome = entrada($_POST['nome']);
 $email = entrada($_POST['email']);
 $telefone = entrada($_POST['telefone']);
