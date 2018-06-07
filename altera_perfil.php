@@ -1,5 +1,5 @@
 <?php
-include("conxao.php");
+include("conexao.php");
 include("biblio.php");
 session_start();
 $user = $_SESSION['user'];
@@ -22,7 +22,7 @@ $stmt->bindParam(6, $coord);
 $stmt->bindParam(7, $ala);
 $stmt->bindParam(8, $user);
 
-$result = $stm->rowCount();
+$result = $stmt->rowCount();
 
 if($result > 0){
   echo "Atualização com sucesso!!;";
