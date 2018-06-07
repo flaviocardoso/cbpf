@@ -22,8 +22,10 @@ try{
       session_start();
       $_SESSION['user'] = $row['user'];
       $_SESSION['nome'] = $row['nome'];
-      $_SESSION['setor'] = setor($row['setor']);
-      $_SESSION['nivel'] = $row['nivel'];
+      //$_SESSION['email'] = $row['email'];
+      //$_SESSION['telefone'] = $row['telefone'];
+      //$_SESSION['setor'] = setor($row['setor']);
+      //$_SESSION['nivel'] = $row['nivel'];
       header("Location: principal.php");
     }else{
       echo "Login ou senha incorretos";

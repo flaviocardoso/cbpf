@@ -23,6 +23,7 @@ include("biblio.php");
         <header>
             <p>Bem vindo, <?php echo nivel($_SESSION['nivel']); ?>!</p>
             <p>Nome : <?php echo $_SESSION["nome"]; ?></p>
+            <p><a href="perfil.php">perfil</a></p>
             <?php
             if(isset($_SESSION["setor"]) && !empty($_SESSION["setor"])){
                 echo "<p>Setor : " . $_SESSION["setor"] . "</p>";
