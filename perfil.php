@@ -39,8 +39,8 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         <p>Email : <?php echo $row["email"]; ?></p>
         <p>Telefone : <?php echo $row["telefone"]; ?></p>
         <p>Setor : <?php echo setor($row["setor"]); ?></p>
-        <p>Sala : <?php echo setor($row["sala"]); ?></p>
-        <p>Coordenação : <?php echo setor($row["coord"]); ?></p>
+        <p>Sala : <?php echo $row["sala"]; ?></p>
+        <p>Coordenação : <?php echo $row["coord"]; ?></p>
         <p>Ala : <?php echo setor($row["ala"]); ?></p>
         <button onclick="troca1();">Alterar</button>
       </div>
