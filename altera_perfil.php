@@ -11,21 +11,24 @@ $sala = entrada($_POST['sala']);
 $coord = entrada($_POST['coord']);
 $ala = entrada($_POST['ala']);
 
-$sql = "update link set nome=?, email=?, telefone=?, setor=?, sala=?, coord=?, ala=? where user=?";
+$sql = "UPDATE link SET nome=:nome, email=:email, telefone=:telefone, setor=:setor, sala=:sala, coord=:coord, ala=:ala WHERE user=:user";
 $stmt = $PDO->prepare($sql);
-$stmt->bindParam(1, $nome);
-$stmt->bindParam(2, $email);
-$stmt->bindParam(3, $telefone);
-$stmt->bindParam(4, setor_data($setor));
-$stmt->bindParam(5, $sala);
-$stmt->bindParam(6, $coord);
-$stmt->bindParam(7, $ala);
-$stmt->bindParam(8, $user);
+$stmt->bindParam(':nome', $nome, PDO::PARAM_STR);
+$stmt->bindParam(':email', $email, PDO::PARAM_STR);
+$stmt->bindParam(':telefone', $telefone, PDO::PARAM_STR);
+$stmt->bindParam(':setor', $setor, PDO::PARAM_STR);
+$stmt->bindParam(':sala', $sala, PDO::PARAM_STR);
+$stmt->bindParam(':coord', $coord, PDO::PARAM_STR);
+$stmt->bindParam(':ala', $ala, PDO::PARAM_STR);
+$stmt->bindParam(':user', $user, PDO::PARAM_STR);
+$stmt->execute();
 
 $result = $stmt->rowCount();
 
 if($result > 0){
   echo "Atualização com sucesso!!;";
+  header("Location:perfil.php");exit;
 }
-
+header("Location:perfil.php?error=1");exit;
+$stmt->close();
 ?>

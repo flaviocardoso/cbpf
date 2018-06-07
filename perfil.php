@@ -14,7 +14,7 @@ $user = $_SESSION['user'];
 
 include("biblio.php");
 include("conexao.php");
-$sql = "select * from usuario where user=?";
+$sql = "select nome, email, telefone, setor, sala, coord, ala from usuario where user=?";
 $stmt = $PDO->prepare($sql);
 $stmt->bindParam(1, $user);
 $stmt->execute();
@@ -39,8 +39,9 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         <p>Email : <?php echo $row["email"]; ?></p>
         <p>Telefone : <?php echo $row["telefone"]; ?></p>
         <p>Setor : <?php echo setor($row["setor"]); ?></p>
-        <p>Sala : </p>
-        <p>Coordenação : </p>
+        <p>Sala : <?php echo setor($row["sala"]); ?></p>
+        <p>Coordenação : <?php echo setor($row["coord"]); ?></p>
+        <p>Ala : <?php echo setor($row["ala"]); ?></p>
         <button onclick="troca1();">Alterar</button>
       </div>
       <div id="perfil_alt" style="visibility:hidden;">
@@ -56,7 +57,18 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
               <td>Telefone : </td><td><input name="telefone" value="<?php echo $row["telefone"]; ?>" required/></td>
             </tr>
             <tr>
-              <td>Setor</td><td><input name="setor" value="<?php echo setor($row["setor"]); ?>" required/></td>
+              <td>Setor</td>
+              <td>
+                <select name="setor">
+                  <option value="" <? echo $row['setor'] == ''?'selected':''; ?>></option>
+                  <option value="comp" <? echo $row['setor'] == 'comp'?'selected':'';?>>Computação</option>
+                  <option value="elet" <? echo $row['setor'] == 'elet'?'selected':''; ?>>Eletrônica</option>
+                  <option value="meca" <? echo $row['setor'] == 'meca'?'selected':''; ?>>Mecânica</option>
+                  <option value="marc" <? echo $row['setor'] == 'marc'?'selected':''; ?>>Marcearia</option>
+                  <option value="vidr" <? echo $row['setor'] == 'vidr'?'selected':''; ?>>Vidro</option>
+                  <option value="webi" <? echo $row['setor'] == 'webi'?'selected':''; ?>>Web Institucional</option>
+                  <option value="segu" <? echo $row['setor'] == 'segu'?'selected':'';?>>Segurança de Rede</option>
+              </select></td>
             </tr>
             <tr>
               <td>Sala : </td><td><input name="sala" value="" placeholder="Insira a sua Sala"/></td>
