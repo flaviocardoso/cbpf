@@ -28,7 +28,7 @@ function setor($area){
 
     return $s;
 }
-function setior_data($area){
+function setor_data($area){
   $s = "";
 
   switch($area){
