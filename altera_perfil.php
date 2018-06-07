@@ -25,7 +25,7 @@ $stmt->bindParam(8, $user);
 $result = $stm->rowCount();
 
 if($result > 0){
-  echo "Atualização com sucesso!!;"
+  echo "Atualização com sucesso!!;";
 }
 
 ?>
