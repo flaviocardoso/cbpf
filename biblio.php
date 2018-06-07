@@ -28,6 +28,36 @@ function setor($area){
 
     return $s;
 }
+function setior_data($area){
+  $s = "";
+
+  switch($area){
+      case "Computação":
+          $s = "comp";
+          break;
+      case "Eletrônica":
+          $s = "elet";
+          break;
+      case "Mecânica":
+          $s = "meca";
+          break;
+      case "Marcenaria":
+          $s = "marc";
+          break;
+      case "Vidro":
+          $s = "vidr";
+          break;
+      case "Web Institucional":
+          $s = "webi";
+          break;
+      case "Segurança da Rede":
+          $s = "segu";
+          break;
+  }
+
+  return $s;
+}
+
 function entrada($data){
     $data = trim($data);
     $data = stripcslashes($data);

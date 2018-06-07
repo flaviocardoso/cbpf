@@ -14,7 +14,7 @@ $ativo = 1;
 $cadastro = $dt->format('Y-m-d H:i:s');
 
 try{
-  $sql_insert = "INSERT INTO usuario VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+  $sql_insert = "INSERT INTO usuario(id, nome, user, email, telefone, senha, setor, nivel, ativo, cadastro) VALUES(NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   $stm = $PDO->prepare($sql_insert);
   $stm->bindParam(1, $nome);

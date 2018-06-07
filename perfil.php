@@ -47,38 +47,41 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         <form action="altera_perfil.php" method="post">
           <table>
             <tr>
-              <td>Nome : </td><td></td>
+              <td>Nome : </td><td><input name="nome" value="<?php echo $row['nome'];?>" required/></td>
             </tr>
             <tr>
-              <td>Email : </td><td></td>
+              <td>Email : </td><td><input name="email" value="<?php echo $row["email"]; ?>" required/></td>
             </tr>
             <tr>
-              <td>Telefone : </td>
+              <td>Telefone : </td><td><input name="telefone" value="<?php echo $row["telefone"]; ?>" required/></td>
             </tr>
             <tr>
-              <td>Setor</td><td></td>
+              <td>Setor</td><td><input name="setor" value="<?php echo setor($row["setor"]); ?>" required/></td>
             </tr>
             <tr>
-              <td>Sala : </td><td></td>
+              <td>Sala : </td><td><input name="sala" value="" placeholder="Insira a sua Sala"/></td>
             </tr>
             <tr>
-              <td>Coordenação : </td><td></td>
+              <td>Coordenação : </td><td><input name="coord" value="" placeholder="Insira a sua Coordenação"/></td>
+            </tr>
+            <tr>
+              <td>Ala : </td><td><input name="ala" value="" placeholder="Insira a sua Ala"/></td>
             </tr>
           </table>
           <input type="submit" value="Enviar">
-          <button onclick="troca2;">Cancelar</button>
+          <button onclick="troca2()">Cancelar</button>
         </form>
 
       </div>
       <script>
         //window.open("principal.php");
         function troca1() {
-          //document.getElementById("perfil").style.visibility = "hidden";
-          //document.getElementById("perfil_alt").style.visibility = "visible";
-          var nome = prompt("Nome : ");
-          var email = prompt("Email : ");
-          var telefone = prompt("Telefone : ");
-          var setor = prompt("Setor : ");
+          document.getElementById("perfil").style.visibility = "hidden";
+          document.getElementById("perfil_alt").style.visibility = "visible";
+          //var nome = prompt("Nome : ");
+          //var email = prompt("Email : ");
+          //var telefone = prompt("Telefone : ");
+          //var setor = prompt("Setor : ");
         }
         function troca2() {
           document.getElementById("perfil").style.visibility = "visible";
