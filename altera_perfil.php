@@ -19,7 +19,7 @@ $stmt->bindParam(3, $telefone);
 $stmt->bindParam(4, setor_data($setor));
 $stmt->bindParam(5, $sala);
 $stmt->bindParam(6, $coord);
-$stmt->bindParam(7, $ala)
+$stmt->bindParam(7, $ala);
 $stmt->bindParam(8, $user);
 
 $result = $stm->rowCount();
