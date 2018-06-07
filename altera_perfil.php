@@ -25,7 +25,6 @@ $stmt->bindParam(8, $user);
 $result = $stm->rowCount();
 
 if($result > 0){
-  $row = $stmt->fetch(PDO::FETCH_ASSOC);
   echo "Atualização com sucesso!!;"
 }
 
