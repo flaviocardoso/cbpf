@@ -11,7 +11,7 @@ $sala = entrada($_POST['sala']);
 $coord = entrada($_POST['coord']);
 $ala = entrada($_POST['ala']);
 
-$sql = "UPDATE link SET nome=:nome, email=:email, telefone=:telefone, setor=:setor, sala=:sala, coord=:coord, ala=:ala WHERE user=:user";
+$sql = "UPDATE usuario SET nome=:nome, email=:email, telefone=:telefone, setor=:setor, sala=:sala, coord=:coord, ala=:ala WHERE user=:user";
 $stmt = $PDO->prepare($sql);
 $stmt->bindParam(':nome', $nome, PDO::PARAM_STR);
 $stmt->bindParam(':email', $email, PDO::PARAM_STR);
