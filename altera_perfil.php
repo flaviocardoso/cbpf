@@ -1,5 +1,5 @@
 <?php
-include("conxecao.php");
+include("conxao.php");
 include("biblio.php");
 session_start();
 $user = $_SESSION['user'];
