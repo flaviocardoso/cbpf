@@ -29,6 +29,7 @@ include("biblio.php");
                 echo "<p>Setor : " . $_SESSION["setor"] . "</p>";
             }
             ?>
+            <p><a href="criar_orderservice.php">Criar Ordem de Servico</a></p>
             <p><a href="logout.php">Logout</a></p>
             <?php
             switch ($_SESSION['nivel']) {
