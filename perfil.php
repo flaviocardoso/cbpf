@@ -71,19 +71,18 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
               </select></td>
             </tr>
             <tr>
-              <td>Sala : </td><td><input name="sala" value="" placeholder="Insira a sua Sala"/></td>
+              <td>Sala : </td><td><input name="sala" value="<?php echo $row["sala"]; ?>" placeholder="Insira a sua Sala"/></td>
             </tr>
             <tr>
-              <td>Coordenação : </td><td><input name="coord" value="" placeholder="Insira a sua Coordenação"/></td>
+              <td>Coordenação : </td><td><input name="coord" value="<?php echo $row["coord"]; ?>" placeholder="Insira a sua Coordenação"/></td>
             </tr>
             <tr>
-              <td>Ala : </td><td><input name="ala" value="" placeholder="Insira a sua Ala"/></td>
+              <td>Ala : </td><td><input name="ala" value="<?php echo $row["ala"]; ?>" placeholder="Insira a sua Ala"/></td>
             </tr>
           </table>
           <input type="submit" value="Enviar">
-          <button onclick="troca2()">Cancelar</button>
         </form>
-
+        <button onclick="troca2()">Cancelar</button>
       </div>
       <script>
         //window.open("principal.php");
