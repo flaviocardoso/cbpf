@@ -43,32 +43,62 @@ $dh = $dt->format('d/m/Y H:i');
     <section>
       <form method="post">
         <fieldset>
-          <legend>Ordem de Serviço</legend>
-          <p><label for="nos">Número de OS : </label>
-          <input id="nos" type="text" name="nos" value="<?php echo $nos; ?>" required/></p>
-          <p><label for="nome">Solicitante : </label>
-          <input id="nome" type="text" name="nome" value="<?php echo $row["nome"]; ?>" required/></p>
-          <p><label for="email">Email : </label>
-            <input id="email"  type="text" name="email" value="<?php echo $row["email"]; ?>" required/></p>
-          <p><label for="coord">Coordenação : </label>
-          <input id="coord" type="text" name="coord" value="<?php echo $row["coord"]; ?>" required/></p>
-          <p><label for="ala">Ala : </label>
-          <input id="ala" type="text" name="ala" value="<?php echo $row["ala"]; ?>" required/></p>
-          <p><label for="sala">Sala : </label>
-          <input id="sala" type="text" name="sala" value="<?php echo $row["sala"]; ?>" required/></p>
-          <p><label for="telefone">Telefone : </label>
-          <input id="telefone" type="tel" name="telefone" value="<?php echo $row['telefone']; ?>" required/></p>
-          <label for="dh">Data e Hora : </label>
-          <input id="dh" type="text" name="dh" value="<?php echo $dh; ?>" required/>
-        </fieldset>
-        <br/>
-        <fieldset>
-          <legend>Descrição do pedido</legend>
-          <textarea id="desc" cols="30" rows="10"></textarea><br/><br/>
-          <button type="submit">Confirmar</button>
-          <button type="submit">Cancelar</button>
+          <legend>Criando Ordem de Serviço</legend>
+          <fieldset>
+            <legend>Número de OS</legend>
+            <input id="nos" type="text" name="nos" value="<?php echo $nos; ?>" required/>
+          </fieldset>
+          <br/>
+          <fieldset>
+            <legend>Dados do solicitante</legend>
+            <fieldset>
+              <legend>Solicitante</legend>
+              <input id="nome" type="text" name="nome" value="<?php echo $row["nome"]; ?>" required/>
+            </fieldset>
+            <fieldset>
+              <legend>Email</legend>
+              <input id="email"  type="text" name="email" value="<?php echo $row["email"]; ?>" required/>
+            </fieldset>
+            <fieldset>
+              <legend>Coordenação</legend>
+              <input id="coord" type="text" name="coord" value="<?php echo $row["coord"]; ?>" required/>
+            </fieldset>
+            <fieldset>
+              <legend>Ala</legend>
+              <input id="ala" type="text" name="ala" value="<?php echo $row["ala"]; ?>" required/>
+            </fieldset>
+            <fieldset>
+              <legend>Sala</legend>
+              <input id="sala" type="text" name="sala" value="<?php echo $row["sala"]; ?>" required/>
+            </fieldset>
+            <fieldset>
+              <legend>Telefone</legend>
+              <input id="telefone" type="tel" name="telefone" value="<?php echo $row['telefone']; ?>" required/>
+            </fieldset>
+            <fieldset>
+              <legend>Setor de destinação</legend>
+              <select name="setor">
+                <option value=""></option>
+                <option value="comp">Computação</option>
+                <option value="elet">Eletrônica</option>
+                <option value="meca">Mecânica</option>
+                <option value="marc">Marcearia</option>
+                <option value="vidr">Vidro</option>
+                <option value="webi">Web Institucional</option>
+                <option value="segu">Segurança de Rede</option>
+              </select>
+              <input id="dh" type="hidden" name="dh" value="<?php echo $dh; ?>" required/>
+          </fieldset>
+          <br/>
+          <fieldset>
+            <legend>Descrição do serviço</legend>
+            <textarea id="desc" cols="30" rows="10"></textarea><br/><br/>
+            <button type="submit" formaction="enviar_orderservice.php">Confirmar</button>
+            <button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>
+          </fieldset>
         </fieldset>
 
+      </form>
     </section>
 
   </body>
