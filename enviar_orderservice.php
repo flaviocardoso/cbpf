@@ -28,7 +28,7 @@ $stmt->bindParam(":ala", $ala, PDO::PARAM_STR);
 $stmt->bindParam(":sala", $sala, PDO::PARAM_STR);
 $stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
 $stmt->bindParam(":setor", $setor, PDO::PARAM_STR);
-$stmt->bindParam(":datahora", $datahora, PDO::PARAM_STR);
+$stmt->bindParam(":datahora", $dh, PDO::PARAM_STR);
 $stmt->bindParam(":desc", $desc, PDO::PARAM_STR);
 
 $stmt->execute();
