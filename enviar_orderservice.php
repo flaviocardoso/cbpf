@@ -21,16 +21,15 @@ $desc = $_POST["nos"];
 $sql = "INSERT INTO orderservice (user, nos, nome, email, coord, ala, sala, telefone, setor, datahora, desc) VALUES (:user, :nos, :nome, :email, :coord, :ala, :sala, :telefone, :setor, :datahora, :desc)";
 $stmt = $PDO->prepare($sql);
 $stmt->bindParam(":user", $user, PDO::PARAM_STR);
-$stmt->bindParam(":nos", $user, PDO::PARAM_STR);
-$stmt->bindParam(":email", $user, PDO::PARAM_STR);
-$stmt->bindParam(":coord", $user, PDO::PARAM_STR);
-$stmt->bindParam(":ala", $user, PDO::PARAM_STR);
-$stmt->bindParam(":sala", $user, PDO::PARAM_STR);
-$stmt->bindParam(":telefone", $user, PDO::PARAM_STR);
+$stmt->bindParam(":nos", $nos, PDO::PARAM_STR);
+$stmt->bindParam(":email", $email, PDO::PARAM_STR);
+$stmt->bindParam(":coord", $coord, PDO::PARAM_STR);
+$stmt->bindParam(":ala", $ala, PDO::PARAM_STR);
+$stmt->bindParam(":sala", $sala, PDO::PARAM_STR);
+$stmt->bindParam(":telefone", $telefone, PDO::PARAM_STR);
 $stmt->bindParam(":setor", $setor, PDO::PARAM_STR);
-$stmt->bindParam(":datahora", $user, PDO::PARAM_STR);
-$stmt->bindParam(":desc", $user, PDO::PARAM_STR);
-$stmt->bindParam(":user", $user, PDO::PARAM_STR);
+$stmt->bindParam(":datahora", $datahora, PDO::PARAM_STR);
+$stmt->bindParam(":desc", $desc, PDO::PARAM_STR);
 
 $stmt->execute();
 
