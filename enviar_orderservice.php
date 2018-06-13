@@ -6,15 +6,15 @@ session_start();
 $user = $_SESSION["user"];
 
 $nos = $_POST["nos"];
-$nome = $_POST["nos"];
-$email = $_POST["nos"];
-$coord = $_POST["nos"];
-$ala = $_POST["nos"];
-$sala = $_POST["nos"];
-$telefone = $_POST["nos"];
+$nome = $_POST["nome"];
+$email = $_POST["email"];
+$coord = $_POST["coord"];
+$ala = $_POST["ala"];
+$sala = $_POST["sala"];
+$telefone = $_POST["telefone"];
 $setor = $_POST["setor"];
-$dh = $_POST["nos"];
-$desc = $_POST["nos"];
+$dh = $_POST["dh"];
+$desc = $_POST["desc"];
 //$arquivos = $_POST["nos"];
 //$nos = $_POST["nos"];
 
