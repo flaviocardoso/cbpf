@@ -20,12 +20,6 @@ $stmt->bindParam(1, $user);
 $stmt->execute();
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-$dt = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
-
-$nos = $row["id"]."/".$dt->format('YmdHis');
-$dh = $dt->format('d/m/Y H:i');
-
 ?>
 
 <!DOCTYPE html>
@@ -41,14 +35,14 @@ $dh = $dt->format('d/m/Y H:i');
       <p>Criando a ordem de serviço</p>
     </header>
     <section>
-      <form method="post">
+      <form id="form_os" method="post">
         <fieldset>
           <legend>Criando Ordem de Serviço</legend>
-          <fieldset>
+          <!--<fieldset>
             <legend>Número de OS</legend>
             <input id="nos" type="text" name="nos" value="<?php echo $nos; ?>" required/>
           </fieldset>
-          <br/>
+          <br/>-->
           <fieldset>
             <legend>Dados do solicitante</legend>
             <fieldset>
@@ -87,12 +81,11 @@ $dh = $dt->format('d/m/Y H:i');
                 <option value="webi">Web Institucional</option>
                 <option value="segu">Segurança de Rede</option>
               </select>
-              <input id="dh" type="hidden" name="dh" value="<?php echo $dh; ?>" required/>
           </fieldset>
           <br/>
           <fieldset>
             <legend>Descrição do serviço</legend>
-            <textarea id="desc" cols="30" rows="10"></textarea><br/><br/>
+            <textarea id="descr" name="descr" cols="30" rows="10" form="form_os"></textarea><br/><br/>
             <button type="submit" formaction="enviar_orderservice.php">Confirmar</button>
             <button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>
           </fieldset>
