@@ -26,7 +26,7 @@ include("biblio.php");
             <p><a href="perfil.php">perfil</a></p>
             <?php
             if(isset($_SESSION["setor"]) && !empty($_SESSION["setor"])){
-                echo "<p>Setor : " . $_SESSION["setor"] . "</p>";
+                echo "<p>Setor : " . setor($_SESSION["setor"]) . "</p>";
             }
             ?>
             <p><a href="criar_orderservice.php">Criar Ordem de Servico</a></p>

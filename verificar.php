@@ -24,7 +24,7 @@ try{
       $_SESSION['nome'] = $row['nome'];
       //$_SESSION['email'] = $row['email'];
       //$_SESSION['telefone'] = $row['telefone'];
-      //$_SESSION['setor'] = setor($row['setor']);
+      $_SESSION['setor'] = $row['setor'];
       $_SESSION['nivel'] = $row['nivel'];
       $_SESSION['ativo'] = $row['ativo'];
       $_SESSION['cadastro'] = $row['cadastro'];

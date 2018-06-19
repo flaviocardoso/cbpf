@@ -41,9 +41,38 @@ $stmt->execute();
 $result = $stmt->rowCount();
 
 if($result > 0){
-  header("Location: solicitante_orderservices.php");
+  $sql1 = "SELECT idos FROM orderservice WHERE nos=:nos";
+  $stmt1 = $PDO->prepare($sql1);
+  $stmt1->bindParam(':nos', $nos, PDO::PARAM_STR);
+  $stmt1->execute();
+
+  $result1 = $stmt1->rowCount();
+
+  if($result1 > 0){
+    $status = "NOVA";
+    $row = $stmt1->fetch(PDO::FETCH_ASSOC);
+    $idos1 =  $row["idos"];
+
+    $sql2 = "INSERT INTO tecnico(idtecn, idos, nome, user, setor, datahora, status, laudo) VALUES(NULL, :idos, NULL, NULL, :setor, :datahora, :status, NULL)";
+    $stmt2 = $PDO->prepare($sql2);
+    $stmt2->bindParam(':idos', $idos1, PDO::PARAM_INT);
+    $stmt2->bindParam(':setor', $setor, PDO::PARAM_STR);
+    $stmt2->bindParam(':datahora', $dh, PDO::PARAM_STR);
+    $stmt2->bindParam(':status', $status, PDO::PARAM_STR);
+    $stmt2->execute();
+    $result2 = $stmt2->rowCount();
+
+    if($result2 > 0){
+      header("Location: solicitante_orderservices.php");
+    }else{
+      header("Location: criar_orderservice.php?erro=naotecnico");
+    }
+
+  }else{
+    header("Location: criar_orderservice.php?erro=naoidos");
+  }
 }else{
-  header("Location: criar_orderservice.php?user=$user&coord=$coord&descr=$descr&setor=$setor&dh=$dh&telefone=$telefone&sala=$sala");
+  header("Location: criar_orderservice.php?erro=naoos");
 }
 
 ?>

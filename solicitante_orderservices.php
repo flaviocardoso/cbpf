@@ -3,9 +3,10 @@
   include("conexao.php");
 
   session_start();
+  //inserido para todos -> remover da página atendidos e não atendidos. Deixar a privelégio de pesquisa.
   $user = $_SESSION["user"];
 
-  $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, os.datahora as dhentrada, te.nome as tecnico, te.datahora as dhultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico order by datahora desc LIMIT 1,1) te where os.user=:user";
+  $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os inner JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico where idos=os.idos order by datahora desc LIMIT 1) te using(idos) where os.user=:user";
 
   $stmt1 = $PDO->prepare($sql1);
   $stmt1->bindParam(':user', $user, PDO::PARAM_STR);
@@ -32,15 +33,17 @@
       <p>Seus Pedidos</p>
     </header>
     <section>
-      <p>Atendidos</p>
+      <p>Todos</p>
       <table>
         <?php
           print_r($rows1);
         ?>
       </table>
-      <p>Não Atendidos</p>
+      <p>Erros</p>
       <table>
         <?php
           print_r($rows2);
         ?>
       </table>
+  </body>
+</html>
