@@ -6,7 +6,7 @@
   //inserido para todos -> remover da página atendidos e não atendidos. Deixar a privelégio de pesquisa.
   $user = $_SESSION["user"];
 
-  $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os inner JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico order by datahora desc) te using(idos) where os.user='flavioc41'";
+  $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os inner JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico order by datahora desc) te using(idos) where os.user=:user";
 
   $stmt1 = $PDO->prepare($sql1);
   $stmt1->bindParam(':user', $user, PDO::PARAM_STR);
