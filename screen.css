@@ -1,2 +1,2 @@
-body {width: 0.8em;} header {width: 632px;} section {width: 632px;} #solic {display: flex; flex-wrap: wrap;} #dados {width: 300px; margin-bottom: 3px;} #descr {width: 300px;} #prot {margin-bottom: 3px;}
-#div_nome,#div_telefone,#div_email,#div_coord,#div_ala,#div_sala {padding: 5px;} #laudo {margin-bottom: 3px;} #text_laudo {resize: none;} #div_laudos {overflow-y: scroll}
+body {width: 39.27em; margin-left: auto; margin-right: auto;padding-left: auto; padding-right: auto;} header {width: 632px;} section {width: 632px;} #os {margin-bottom: 3px;} #solic {height: 200px; display: flex; flex-wrap: wrap} #dados {width: 300px; height: 200px; margin-bottom: 3px; overflow-x:auto;} #descr{width: 300px; height:200px} #prot {margin-bottom: 3px;}
+#div_nome,#div_telefone,#div_email,#div_coord,#div_ala,#div_sala {padding: 5px;} #laudo {margin-bottom: 3px;} #div_descr {height: 155px; overflow-y: auto;} #text_laudo {resize: none;} #div_laudos {height:180px; overflow-y:auto; }
