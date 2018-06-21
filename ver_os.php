@@ -39,6 +39,7 @@ if($result3 > 0){
     <meta charset="utf-8">
     <meta content="width=device-width initial-scale=1 maximum-scale=1" name="viewport">
     <title>Ver Ordem de Serviço</title>
+    <link rel="stylesheet" href="screen.css">
   </head>
   <body>
     <header>
@@ -46,36 +47,54 @@ if($result3 > 0){
     </header>
     <section>
       <form action="" method="post" id=form_os>
-        <fieldset>
+        <fieldset id="os">
           <legend>Ver Ordem de Serviço</legend>
-          <fieldset>
+          <fieldset id="prot">
             <legend>Protocolo</legend>
-            <input id="nos" type="text" name="nos" value="<? echo $rows1["nos"]; ?> "readonly/>
+            <span id="nos"><? echo $rows1["nos"]; ?></span>
           </fieldset>
-          <fieldset>
-            <legend>Dados do Solicitante</legend>
-            Nome : <input id="nome" type="text" value="<? echo $rows2["nome"]; ?>" readonly/><br>
-            Telefone : <input id="telefone" type="text" value="<? echo $rows2["telefone"]; ?>" readonly/><br>
-            Email : <input id="email" type="text" value="<? echo $rows2["email"]; ?>" readonly/><br>
-            Coordenação : <input id="coord" type="text" value="<? echo $rows2["coord"]; ?>" readonly/><br>
-            Ala : <input id="ala" type="text" value="<? echo $rows2["ala"]; ?>" readonly/><br>
-            Sala : <input id="sala" type="text" value="<? echo $rows2["sala"]; ?>" readonly/><br>
+          <div id="solic">
+            <div id="dados">
+              <fieldset>
+                <legend>Dados do Solicitante</legend>
+                <div id="div_dados">
+                  <div id="div_nome">Nome : <span id="nome"><? echo $rows2["nome"];?></span></div>
+                  <div id="div_telefone">Telefone : <span id="telefone"><? echo $rows2["telefone"]; ?></span></div>
+                  <div id="div_email">Email : <span id="email"><? echo $rows2["email"]; ?></span></div>
+                  <div id="div_coord">Coordenação : <span id="coord"><? echo $rows2["coord"]; ?></span></div>
+                  <div id="div_ala">Ala : <span id="ala"><? echo $rows2["ala"]; ?></span></div>
+                  <div id="div_sala">Sala : <span id="sala"><? echo $rows2["sala"]; ?></span></div>
+                </div>
+              </fieldset>
+            </div>
+            <div id="descr">
+              <fieldset>
+                <legend>Descrição</legend>
+                <div id="div_descr">
+                  <? echo $rows1["descr"]; ?>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+          <fieldset id="laudo">
+            <legend>Laudo</legend>
+            <textarea id="text_laudo" rows="5" cols="55" form="form_os" placeholder="Escreva Seu Laudo Aqui!"></textarea>
           </fieldset>
-          <fieldset>
-            <legend>Descrição</legend>
-            <textarea id="descr" name="descr" cols="30" rows="10" form="form_os" readonly><? echo $rows1["descr"]; ?></textarea>
-          </fieldset>
-          <fieldset>
-            <legend>Laudos Anteriores</legend>
-            <?
-              foreach ($rows3 as $key => $value) {
-                if($value["status"] == "NOVAS"){
-                  echo "<p>$value[nome]</p>";
-                  echo "<p>$value[laudo]</p>";
-                }
+        </fieldset>
+        <fieldset id="laudos">
+          <legend>Laudos Anteriores</legend>
+          <div id="div_laudos">
+          <?
+            foreach ($rows3 as $key => $value) {
+              if($value["status"] == "NOVAS"){
+                echo "<div id='ant_laudo'>";
+                echo "  <div>$value[nome]</div>";
+                echo "  <div>$value[laudo]</div>";
+                echo "</div>";
               }
-            ?>
-
+            }
+          ?>
+        </div>
         </fieldset>
       </form>
     </section>
