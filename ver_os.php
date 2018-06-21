@@ -79,10 +79,18 @@ if($result3 > 0){
           </div>
           <fieldset id="laudo">
             <legend>Laudo</legend>
-            <textarea id="text_laudo" rows="5" cols="55" form="form_os" placeholder="Escreva Seu Laudo Aqui!"></textarea>
-            <div id="bot">
-              <button type="submit">Confirmar</button>
-              <button type="button" onclick="closeScreen()">Cancelar</button>
+            <div id="div_laudo">
+              <div id="div_laudo1">
+                <textarea id="text_laudo" rows="5" cols="68" form="form_os" placeholder="Escreva Seu Laudo Aqui!"></textarea>
+              </div>
+              <div id="bot">
+                <div id="bot2">
+                  <button type="button" onclick="closeScreen()">Cancelar</button>
+                </div>
+                <div id="bot1">
+                  <button type="submit">Confirmar</button>
+                </div>
+              </div>
             </div>
           </fieldset>
         </fieldset>
