@@ -1,0 +1,2 @@
+body {width: 0.8em;} header {width: 632px;} section {width: 632px;} #solic {display: flex; flex-wrap: wrap;} #dados {width: 300px; margin-bottom: 3px;} #descr {width: 300px;} #prot {margin-bottom: 3px;}
+#div_nome,#div_telefone,#div_email,#div_coord,#div_ala,#div_sala {padding: 5px;} #laudo {margin-bottom: 3px;} #text_laudo {resize: none;} #div_laudos {overflow-y: scroll}
