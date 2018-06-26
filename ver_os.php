@@ -24,7 +24,7 @@ if($result2 > 0){
   $rows2 = $stmt2->fetch(PDO::FETCH_ASSOC);
 }
 
-$sql3 = "SELECT nome, datahora, status, laudo FROM tecnico WHERE idos=:id";
+$sql3 = "SELECT nome, datahora, status, laudo FROM tecnico WHERE idos=:id order by datahora desc";
 $stmt3 = $PDO->prepare($sql3);
 $stmt3->bindParam(":id", $id, PDO::PARAM_INT);
 $stmt3->execute();
@@ -47,7 +47,7 @@ if($result3 > 0){
       <p>Ordem de Serviço</p>
     </header>
     <section>
-      <form action="" method="post" id=form_os>
+      <form action="incluir_laudo.php" method="post" id=form_os>
         <fieldset id="os">
           <legend>Ver Ordem de Serviço</legend>
           <fieldset id="prot">
@@ -77,12 +77,22 @@ if($result3 > 0){
               </fieldset>
             </div>
           </div>
-          <fieldset id="laudo">
+          <fieldset id="laudo"><!-- esconder tag hidden="true" -->
             <legend>Laudo</legend>
             <div id="div_laudo">
+              <input type="hidden" name="idos" value="<? echo $id; ?>" />
               <div id="div_laudo1">
-                <textarea id="text_laudo" rows="5" cols="68" form="form_os" placeholder="Escreva Seu Laudo Aqui!"></textarea>
+                <textarea id="text_laudo" name="laudo" rows="5" cols="68" form="form_os" placeholder="Escreva Seu Laudo Aqui!"></textarea>
               </div>
+              Selecione o status :
+              <select name="status" required>
+                <option value=""></option>
+                <option value="CANCE">Canceladas</option>
+                <option value="ANDA">Andamento</option>
+                <option value="MATE">Em Espera de Material</option>
+                <option value="CONT">EM Espera de Contado</option>
+                <option value="ENCE">Encerrada</option>
+              </select>
               <div id="bot">
                 <div id="bot2">
                   <button type="button" onclick="closeScreen()">Cancelar</button>
@@ -99,10 +109,15 @@ if($result3 > 0){
           <div id="div_laudos">
           <?
             foreach ($rows3 as $key => $value) {
-              if($value["status"] == "NOVAS"){
-                echo "<div id='ant_laudo'>";
-                echo "  <div>$value[nome]</div>";
-                echo "  <div>$value[laudo]</div>";
+              if($value["status"] != "NOVA"){
+                echo "<div id=\"ant_laudo\">";
+                echo "<fieldset><legend>Laudo</legend>";
+                echo "<fieldset><legend>Dados Técnico</legend>";
+                echo "<div style=\"display:inline-block;margin-right: 3px;\">Tecnico : $value[nome] //</div>";
+                $data = new DateTime($value["datahora"]);
+                echo "<div style=\"display:inline-block;margin-right: 3px;\">Data : " . $data->format('d-m-Y') . " //</div>";
+                echo "<div style=\"display:inline-block\">Hora : " . $data->format('H:i:s') . "</div></fieldset>";
+                  echo "  <fieldset><div>$value[laudo]</div></fielset></fieldset></fieldset>";
                 echo "</div>";
               }
             }
