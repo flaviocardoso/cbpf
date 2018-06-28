@@ -43,8 +43,7 @@ if($result3 > 0){
     <link rel="stylesheet" href="screen.css">
   </head>
   <body>
-    <header>
-      <p>Ordem de Serviço</p>
+    <header>      
     </header>
     <section>
       <form action="incluir_laudo.php" method="post" id=form_os>
