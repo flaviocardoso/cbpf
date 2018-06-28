@@ -34,7 +34,7 @@ try{
     echo "<script>alert('Cadastro com sucesso!');</script>";
     session_start();
     $_SESSION["user"] = $user;
-    $_SESSION["setor"] = setor($setor);
+    $_SESSION["setor"] = $setor;
     header("Location: principal.php");exit;
   }else{
     echo "<script>alert('Falha de cadastro');</script>";
