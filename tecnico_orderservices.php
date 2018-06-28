@@ -4,7 +4,7 @@ include("biblio.php");
 
 //fazer query para pergar user e setor para mostrar as ordem de serviços alteradas por usuario
 session_start();
-$user = $_SESSION("user");
+$user = $_SESSION["user"];
 
 $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where te.user=:user";
 
