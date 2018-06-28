@@ -28,7 +28,7 @@ try{
       $_SESSION['nivel'] = $row['nivel'];
       $_SESSION['ativo'] = $row['ativo'];
       $_SESSION['cadastro'] = $row['cadastro'];
-      if($row['nivel'] > 1){
+      if($row['nivel'] < 3){
         $_SESSION['coord'] = $row['coord'];
       }else{
         $_SESSION['coord'] = "";
