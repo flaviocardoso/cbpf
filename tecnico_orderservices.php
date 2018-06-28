@@ -41,7 +41,7 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
       <p>Novas</p>
       <table>
         <?php
-          print_r($rows2);
+          //print_r($rows2);
         ?>
       </table>
   </body>
