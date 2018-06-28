@@ -33,8 +33,12 @@ try{
   if($result > 0){
     echo "<script>alert('Cadastro com sucesso!');</script>";
     session_start();
-    $_SESSION["user"] = $user;
-    $_SESSION["setor"] = $setor;
+    $_SESSION['user'] = $row['user'];
+    $_SESSION['nome'] = $row['nome'];
+    $_SESSION['setor'] = $row['setor'];
+    $_SESSION['nivel'] = $row['nivel'];
+    $_SESSION['ativo'] = $row['ativo'];
+    $_SESSION['cadastro'] = $row['cadastro'];
     header("Location: principal.php");exit;
   }else{
     echo "<script>alert('Falha de cadastro');</script>";
