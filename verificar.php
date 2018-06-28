@@ -7,7 +7,7 @@ $user = entrada($_POST['user']);
 $senha = entrada($_POST['senha']);
 
 try{
-  $sql_user = "SELECT nome, user, setor, senha, nivel FROM usuario where user=:user";
+  $sql_user = "SELECT nome, user, setor, senha, coord, nivel FROM usuario where user=:user";
   $stmt = $PDO->prepare($sql_user);
   $stmt->bindParam(':user', $user, PDO::PARAM_STR);
   $stmt->execute();
@@ -28,6 +28,11 @@ try{
       $_SESSION['nivel'] = $row['nivel'];
       $_SESSION['ativo'] = $row['ativo'];
       $_SESSION['cadastro'] = $row['cadastro'];
+      if($row['nivel'] > 1){
+        $_SESSION['coord'] = $row['coord'];
+      }else{
+        $_SESSION['coord'] = "";
+      }
       header("Location: principal.php");
     }else{
       echo "Login ou senha incorretos";
