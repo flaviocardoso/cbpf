@@ -11,7 +11,7 @@ $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr a
 $stmt1 = $PDO->prepare($sql1);
 $stmt1->bindParam(":user", $user, PDO::PARAM_STR);
 $stmt1->execute();
-$rows1 = $stmt1->fetchAll(PDP::FETCH_ASSOC);
+$rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 <!DOCTYPE html>
