@@ -10,16 +10,17 @@ if (!isset($_SESSION['user'])) {
     header("Location: login.php"); exit;
 }
 
-$user = $_SESSION['user'];
-
 include("biblio.php");
 include("conexao.php");
-$sql = "select nome, email, telefone, setor, sala, coord, ala from usuario where user=?";
+$user = $_SESSION['user'];
+echo $user;
+$sql = "SELECT nome, email, telefone, setor, sala, coord, ala FROM usuario WHERE user=:user";
 $stmt = $PDO->prepare($sql);
-$stmt->bindParam(1, $user);
+$stmt->bindParam(":user", $user, PDO::PARAM_STR);
 $stmt->execute();
-
+$result1 = $stmt->rowCount();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
 
 ?>
 <!DOCTYPE html>
@@ -41,7 +42,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         <p>Setor : <?php echo setor($row["setor"]); ?></p>
         <p>Sala : <?php echo $row["sala"]; ?></p>
         <p>Coordenação : <?php echo $row["coord"]; ?></p>
-        <p>Ala : <?php echo setor($row["ala"]); ?></p>
+        <p>Ala : <?php echo $row["ala"]; ?></p>
         <button onclick="troca1();">Alterar</button>
       </div>
       <div id="perfil_alt" style="visibility:hidden;">
