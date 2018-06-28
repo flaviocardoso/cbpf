@@ -19,7 +19,7 @@
                     <tr>
                         <td align="right">Senha : </td>
                         <td>
-                          <input name="senha" type="password" requid/>
+                          <input name="senha" type="password" required/>
                           <a href="http://localhost:8080/cbpf/cadastro.php">Não tem login? Cadastre-se!</a>
                         </td>
                     </tr>
