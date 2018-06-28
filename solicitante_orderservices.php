@@ -6,8 +6,8 @@
   //inserido para todos -> remover da página atendidos e não atendidos. Deixar a privelégio de pesquisa.
   $user = $_SESSION["user"];
 
-  $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os inner JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico order by datahora desc) te using(idos) where os.user=:user";
-
+  $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where os.user=:user";
+  //$sql1 = "SELECT * FROM tecnico as JOIN orderservice as os using "
   $stmt1 = $PDO->prepare($sql1);
   $stmt1->bindParam(':user', $user, PDO::PARAM_STR);
   $stmt1->execute();
@@ -43,7 +43,10 @@
           //print_r($rows1);
           if ($result1 > 0){
             foreach ($rows1 as $key => $value) {
-              print_r($value['id']);//ex.: $value['id']
+              //print_r($value);//ex.: $value['id']
+              echo "$value[descr]<br>";
+              echo "$value[laudo]<br>";
+              echo "$value[id]<br>";
             }
           }
 

@@ -5,7 +5,7 @@
   session_start();
   $setor = $_SESSION["setor"];
 
-  $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, DATE(os.datahora) as data, TIME(os.datahora) as hora, te.nome as tecnico, te.datahora as dhultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico order by datahora desc) te using(idos) where te.setor=:setor";
+  $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, DATE(os.datahora) as data, TIME(os.datahora) as hora, te.nome as tecnico, te.datahora as dhultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where te.setor=:setor";
 
   $stmt1 = $PDO->prepare($sql1);
   $stmt1->bindParam(':setor', $setor, PDO::PARAM_STR);
@@ -36,7 +36,10 @@
         <table>
           <?php
             foreach ($rows1 as $key => $value) {
-              echo "<a href=\"ver_os.php?id=$value[id]\" target=\"_blank\">Acessar</a><br>"; 
+              echo "$value[descr]<br>";
+              echo "$value[laudo]<br>";
+              echo "$value[dhultima]<br>";
+              echo "<a href=\"ver_os.php?id=$value[id]\" target=\"_blank\">Acessar</a><br>";
               // code...
             }
           ?>
