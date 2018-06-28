@@ -32,7 +32,7 @@ include("biblio.php");
             <p><a href="criar_orderservice.php">Criar Ordem de Servico</a></p>
             <p><a href="orderserviceporsetor.php">Ver Ordens de Serviço</a></p>
             <p><a href="solicitante_orderservices.php">Ver Suas Solicitações de Servico</a></p>
-            <p><a href="tecnico_orderservices">Ver Serviços prestados</a></p>
+            <p><a href="tecnico_orderservices.php">Ver Serviços prestados</a></p>
             <p><a href="logout.php">Logout</a></p>
             <?php
             switch ($_SESSION['nivel']) {
