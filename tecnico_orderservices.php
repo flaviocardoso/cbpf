@@ -1,9 +1,18 @@
 <?php
+if (!isset($_SESSION)) session_start();
+
+// Verifica se não há a variável da sessão que identifica o usuário
+if (!isset($_SESSION['user'])) {
+    // Destrói a sessão por segurança
+    session_destroy();
+    // Redireciona o visitante de volta pro login
+    header("Location: login.php"); exit;
+}
 include("conexao.php");
 include("biblio.php");
 
 //fazer query para pergar user e setor para mostrar as ordem de serviços alteradas por usuario
-session_start();
+//session_start();
 $user = $_SESSION["user"];
 $setor = $_SESSION["setor"];
 //echo $setor;

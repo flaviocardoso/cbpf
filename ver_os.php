@@ -1,4 +1,13 @@
 <?php
+if (!isset($_SESSION)) session_start();
+
+// Verifica se não há a variável da sessão que identifica o usuário
+if (!isset($_SESSION['user'])) {
+    // Destrói a sessão por segurança
+    session_destroy();
+    // Redireciona o visitante de volta pro login
+    header("Location: login.php"); exit;
+}
 include("conexao.php");
 
 $id = $_GET["id"];
@@ -43,7 +52,7 @@ if($result3 > 0){
     <link rel="stylesheet" href="screen.css">
   </head>
   <body>
-    <header>      
+    <header>
     </header>
     <section>
       <form action="incluir_laudo.php" method="post" id=form_os>
