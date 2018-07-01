@@ -1,0 +1,13 @@
+Options FollowSymLinks
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteBase /cbpf
+RewriteRule ^criarOS criar_orderservice.php
+RewriteRule ^coordOS coord_orderservice.php
+RewriteRule ^setorOS orderserviceporsetor.php
+RewriteRule ^solicOS solicitante_orderservices.php
+RewriteRule ^tecnOS tecnico_orderservices.php
+RewriteRule ^os/stylesheet/screen.css$ stylesheet/screen.css
+RewriteRule ^os/js/animation.js$ js/animation.js
+RewriteRule ^os/([0-9]+)$ ver_os.php?id=$1 [QSA,NC,L]
