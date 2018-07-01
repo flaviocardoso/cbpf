@@ -48,8 +48,8 @@ if($result3 > 0){
     <meta charset="utf-8">
     <meta content="width=device-width initial-scale=1 maximum-scale=1" name="viewport">
     <title>Ver Ordem de Serviço</title>
-    <script src="animation.js"></script>
-    <link rel="stylesheet" href="screen.css">
+    <script src="js/animation.js"></script>
+    <link rel="stylesheet" href="stylesheet/screen.css">
   </head>
   <body>
     <header>
