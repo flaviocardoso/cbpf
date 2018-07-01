@@ -2,7 +2,6 @@
 include("conexao.php");
 include("biblio.php");
 
-
 $user = entrada($_POST['user']);
 $senha = entrada($_POST['senha']);
 
@@ -33,7 +32,7 @@ try{
       }else{
         $_SESSION['coord'] = "";
       }
-      header("Location: principal.php");
+      header("Location: /cbpf");
     }else{
       echo "Login ou senha incorretos";
       header("Location:login.php?err=1");exit;
