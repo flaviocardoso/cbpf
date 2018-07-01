@@ -22,7 +22,7 @@ $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -34,7 +34,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
     <header>
       <p>Criando a ordem de serviço</p>
     </header>
-    <section>
+    <section>-->
       <form id="form_os" method="post">
         <fieldset>
           <legend>Criando Ordem de Serviço</legend>
@@ -92,7 +92,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
         </fieldset>
 
       </form>
-    </section>
+    <!--</section-->
 
   </body>
 </html>

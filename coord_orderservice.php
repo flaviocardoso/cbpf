@@ -14,7 +14,8 @@ include("biblio.php");
 
 //session_start();
 $coord = $_SESSION["coord"];
-//echo $coord;
+$idtemp = "";
+
 $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) WHERE os.coord=:coord";
 $stmt1 = $PDO->prepare($sql1);
 $stmt1->bindParam(":coord", $coord, PDO::PARAM_STR);
@@ -23,7 +24,7 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -34,7 +35,7 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
     <header>
       <p>Seus Pedidos</p>
     </header>
-    <section>
+    <section>-->
       <p>Todos</p>
       <table>
         <?php
@@ -47,13 +48,11 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
               echo "$value[laudo]<br>";
               echo "$value[data_ultima]<br>";
               echo "$value[hora_ultima]<br>";
-              echo "<a href=\"ver_os.php?id=$value[id]\" target=\"_blank\">Acessar</a><br>";
+              echo "<a href=\"#!$value[id]\">Acessar</a><br>";
             }
-
-
         ?>
       </table>
-      <p>Erros</p>
+      <!--<p>Erros</p>
       <table>
         <?php
           //print_r($rows2);
@@ -61,6 +60,6 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
           //  echo $rows2[$key] . "   ";
           //}
         ?>
-      </table>
+      </table>-->
   </body>
 </html>
