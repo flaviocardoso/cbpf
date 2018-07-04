@@ -1,27 +1,29 @@
 <?php
 if (!isset($_SESSION)) session_start();
-
+$coord = $_SESSION["coord"];
 // Verifica se não há a variável da sessão que identifica o usuário
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']) and !isset($coord)) {
     // Destrói a sessão por segurança
     session_destroy();
     // Redireciona o visitante de volta pro login
     header("Location: login.php"); exit;
 }
 
-include("config/maining/path/conexao.php");
-include("config/maining/path/biblio.php");
-
-//session_start();
-$coord = $_SESSION["coord"];
-$idtemp = "";
-
-$sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) WHERE os.coord=:coord";
-$stmt1 = $PDO->prepare($sql1);
-$stmt1->bindParam(":coord", $coord, PDO::PARAM_STR);
-$stmt1->execute();
-$rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
-
+include_once("config/maining/path/biblio.php");
+$mens = "";
+$rows1 = array();
+if(isset($coord) and !empty($coord))
+{
+  include_once("config/maining/path/CN.php");
+  $PDO = new CN();
+  $rwc = $PDO->orderServicePorCoord($coord);
+  $rows1 = $rwc[0];
+  $count= $rwc[1];
+  if($count == 0)
+  {
+    $mens = "<p>Não encontrado!</p>";
+  }
+}
 ?>
 
 <!--<!DOCTYPE html>
@@ -36,10 +38,12 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
       <p>Seus Pedidos</p>
     </header>
     <section>-->
-      <p>Todos</p>
+      <? $mens ?>
       <table>
         <?php
           //print_r($rows1);
+          if($count > 0)
+          {
             foreach ($rows1 as $key => $value) {
               //print_r($value);//ex.: $value['id']
               echo "$value[descr]<br>";
@@ -50,6 +54,7 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
               echo "$value[hora_ultima]<br>";
               echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
             }
+          }
         ?>
       </table>
       <!--<p>Erros</p>

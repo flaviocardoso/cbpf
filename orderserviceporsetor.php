@@ -1,35 +1,31 @@
 <?php
 
 if (!isset($_SESSION)) session_start();
-
+$setor = $_SESSION["setor"];
 // Verifica se não há a variável da sessão que identifica o usuário
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']) and isset($setor)) {
     // Destrói a sessão por segurança
     session_destroy();
     // Redireciona o visitante de volta pro login
     header("Location: login.php"); exit;
 }
-  include("biblio.php");
-  include("conexao.php");
-
-  //session_start();
-  $setor = $_SESSION["setor"];
-
-  $sql1 = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, DATE(os.datahora) as data, TIME(os.datahora) as hora, te.nome as tecnico, te.datahora as dhultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where te.setor=:setor";
-
-  $stmt1 = $PDO->prepare($sql1);
-  $stmt1->bindParam(':setor', $setor, PDO::PARAM_STR);
-  $stmt1->execute();
-  //$result1 = $stmt1->rowCount();
-  $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
-
-  $sql2 = "SELECT idos as id, nos, nome as solicitante, descr, setor, DATE(datahora) as data, TIME(datahora) as hora FROM orderservice WHERE setor=:setor";
-  $stmt2 = $PDO->prepare($sql2);
-  $stmt2->bindParam(':setor', $setor, PDO::PARAM_STR);
-  $stmt2->execute();
-  $rows2 = $stmt2->fetchAll(PDO::FETCH_ASSOC);
-
-  ?>
+include_once("config/maining/path/biblio.php");
+$mens = "";
+$rows1 = array();
+$count = 0;
+if(isset($setor) and !empty($setor))
+{
+  include_once("config/maining/path/CN.php");
+  $PDO = new CN();
+  $rwc = $PDO->orderServicePorSetor($setor);
+  $rows1 = $rwc[0];
+  $count = $rwc[1];
+  if($count == 0)
+  {
+    $mens = "Não encontrado!";
+  }
+}
+?>
   <!DOCTYPE html>
   <html>
     <head>
@@ -42,9 +38,11 @@ if (!isset($_SESSION['user'])) {
         <p>Ordens de Serviços</p>
       </header>
       <section>
-        <p>Respondidas</p>
+        <? $mens ?>
         <table>
           <?php
+          if($count > 0)
+          {
             foreach ($rows1 as $key => $value) {
               echo "$value[descr]<br>";
               echo "$value[laudo]<br>";
@@ -52,12 +50,7 @@ if (!isset($_SESSION['user'])) {
               echo "<a href=\"ver_os.php?id=$value[id]\" target=\"_blank\">Acessar</a><br>";
               // code...
             }
-          ?>
-        </table>
-        <p>Novas</p>
-        <table>
-          <?php
-            print_r($rows2);
+          }
           ?>
         </table>
     </body>
