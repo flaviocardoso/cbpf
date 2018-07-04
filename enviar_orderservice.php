@@ -63,6 +63,7 @@ if($result > 0){
     $row = $stmt1->fetch(PDO::FETCH_ASSOC);
     $idos1 =  $row["idos"];
 
+/*
     $sql2 = "INSERT INTO tecnico(idtecn, idos, nome, user, setor, datahora, status, laudo) VALUES(NULL, :idos, NULL, NULL, :setor, :datahora, :status, NULL)";
     $stmt2 = $PDO->prepare($sql2);
     $stmt2->bindParam(':idos', $idos1, PDO::PARAM_INT);
@@ -71,18 +72,19 @@ if($result > 0){
     $stmt2->bindParam(':status', $status, PDO::PARAM_STR);
     $stmt2->execute();
     $result2 = $stmt2->rowCount();
+*/
 
     if($result2 > 0){
-      header("Location: solicitante_orderservices.php");
+      header("Location: principal#!/solicOS");
     }else{
-      header("Location: criar_orderservice.php?erro=naotecnico");
+      header("Location: principal#!/criarOS");
     }
 
   }else{
-    header("Location: criar_orderservice.php?erro=naoidos");
+    header("Location: principal#!/criarOS");
   }
 }else{
-  header("Location: criar_orderservice.php?erro=naoos");
+  header("Location: principal#!/criarOS");
 }
 
 ?>
