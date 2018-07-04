@@ -21,7 +21,8 @@ class CN
     }
     catch (PDOException $e)
     {
-      echo 'ERRO' . $e->getMessage();
+      print 'ERRO' . $e->getMessage() . "<br/>";
+      die();
     }
 
   }
@@ -63,9 +64,91 @@ class CN
     }
     catch (PDOException $e)
     {
-      echo 'ERRO' . $e->getMessage();
+      print 'ERRO' . $e->getMessage();
     }
     return $flag;
+  }
+
+  public function orderServicePorCoord($coord)
+  {
+    $rows = array();
+    $count = 0;
+    try{
+      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) WHERE os.coord=:coord";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":coord", $coord, PDO::PARAM_STR);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+
+  public function orderServicePorSetor($setor)
+  {
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, DATE(os.datahora) as data, TIME(os.datahora) as hora, te.nome as tecnico, te.datahora as dhultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where te.setor=:setor";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(':setor', $setor, PDO::PARAM_STR);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+
+  public function orderServicePorSolic($user)
+  {
+    $row = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where os.user=:user";
+      //$sql1 = "SELECT * FROM tecnico as JOIN orderservice as os using "
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(':user', $user, PDO::PARAM_STR);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+
+  public function orderServicePorTec($user, $setor)
+  {
+    $row = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) WHERE te.user=:user and te.setor=:setor";
+
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":user", $user, PDO::PARAM_STR);
+      $stmt->bindParam(":setor", $setor, PDO::PARAM_STR);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
   }
 }
 
