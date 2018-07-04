@@ -3,7 +3,7 @@ include_once("config/maining/path/biblio.php");
 $flag = "";
 if(isset($_POST["submit"]))
 {
-  include_once("config/maining/path/Connection.php");
+  include_once("config/maining/path/CN.php");
 
   $user = entrada($_POST['user']);
   $senha = entrada($_POST['senha']);
