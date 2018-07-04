@@ -1,7 +1,7 @@
 <?php
 
 if (!isset($_SESSION)) session_start();
-
+$user = $_SESSION['user'];
 // Verifica se não há a variável da sessão que identifica o usuário
 if (!isset($_SESSION['user'])) {
     // Destrói a sessão por segurança
@@ -9,14 +9,11 @@ if (!isset($_SESSION['user'])) {
     // Redireciona o visitante de volta pro login
     header("Location: login.php"); exit;
 }
-
-$user = $_SESSION['user'];
-
 include("biblio.php");
 include("conexao.php");
-$sql = "select id, nome, email, telefone, setor, sala, coord, ala from usuario where user=?";
+$sql = "select id, nome, email, telefone, setor, sala, coord, ala from usuario where user=:user";
 $stmt = $PDO->prepare($sql);
-$stmt->bindParam(1, $user);
+$stmt->bindParam(":user", $user. PDO::PARAM_STR);
 $stmt->execute();
 
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -85,7 +82,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
           <fieldset>
               <legend>Arquivos</legend>
               <input type="file" name="arquivo[]" multiple/>
-          </fieldset>    
+          </fieldset>
           <br/>
           <fieldset>
             <legend>Descrição do serviço</legend>
