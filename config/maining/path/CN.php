@@ -26,6 +26,25 @@ class CN
     }
 
   }
+  public function orderServicePorNOS($nos)
+  {
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT idos FROM orderservice WHERE nos=:nos";
+      $stmt = $this->link->prepare($sql1);
+      $stmt->bindParam(':nos', $nos, PDO::PARAM_STR);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage() . "<br/>";
+    }
+    return array($rows, $count);
+  }
 
   public function verfUSER($user,$senha)
   {
@@ -80,6 +99,80 @@ class CN
       $stmt->execute();
       $count = $stmt->rowCount();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+
+  public function consultaUser($user)
+  {
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "select id, nome, email, telefone, setor, sala, coord, ala from usuario where user=:user";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":user", $user, PDO::PARAM_STR);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+  public function inserirOS($user, $nos, $nome, $email, $coord, $ala, $sala, $telefone, $setor, $arq, $dh, $descr)
+  {
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "INSERT INTO orderservice (idos, user, nos, nome, email, coord, ala, sala, telefone, setor, arq, datahora, descr) VALUES (NULL, :user, :nos, :nome, :email, :coord, :ala, :sala, :telefone, :setor, :arq, :datahora, :descr)";
+      $stmt = $PDO->prepare($sql);
+
+      $stmt->bindParam(':user', $user, PDO::PARAM_STR);
+      $stmt->bindParam(':nos', $nos, PDO::PARAM_STR);
+      $stmt->bindParam(':nome', $nome, PDO::PARAM_STR);
+      $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+      $stmt->bindParam(':coord', $coord, PDO::PARAM_STR);
+      $stmt->bindParam(':ala', $ala, PDO::PARAM_STR);
+      $stmt->bindParam(':sala', $sala, PDO::PARAM_STR);
+      $stmt->bindParam(':telefone', $telefone, PDO::PARAM_STR);
+      $stmt->bindParam(':setor', $setor, PDO::PARAM_STR);
+      $stmt->bindParam(':arq', $arq, PDO::PARAM_STR);
+      $stmt->bindParam(':datahora', $dh, PDO::PARAM_STR);
+      $stmt->bindParam(':descr', $descr, PDO::PARAM_STR);
+
+      $stmt->execute();
+
+      $result = $stmt->rowCount();
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+
+  public function inserirTecnNOVAOS($id, $setor, $dh, $status)
+  {
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "INSERT INTO tecnico(idtecn, idos, nome, user, setor, datahora, status, laudo) VALUES(NULL, :id, NULL, NULL, :setor, :datahora, :status, NULL)";
+      $stmt2 = $this->link->prepare($sql);
+      $stmt2->bindParam(':id', $id, PDO::PARAM_INT);
+      $stmt2->bindParam(':setor', $setor, PDO::PARAM_STR);
+      $stmt2->bindParam(':datahora', $dh, PDO::PARAM_STR);
+      $stmt2->bindParam(':status', $status, PDO::PARAM_STR);
+      $stmt2->execute();
+      $count = $stmt->rowCount();
     }
     catch (PDOException $e)
     {
