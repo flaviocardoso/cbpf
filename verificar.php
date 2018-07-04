@@ -1,18 +1,22 @@
 <?php
-include("conexao.php");
-include("biblio.php");
+//include("config/maining/path/conexao.php");
+//include("config/maining/path/biblio.php");
+include_once("config/maining/path/Connection.php");
 
 $user = entrada($_POST['user']);
 $senha = entrada($_POST['senha']);
 
-try{
+/*try{
   $sql_user = "SELECT nome, user, setor, senha, coord, nivel FROM usuario where user=:user";
   $stmt = $PDO->prepare($sql_user);
   $stmt->bindParam(':user', $user, PDO::PARAM_STR);
   $stmt->execute();
 
   $result = $stmt->rowCount();
-
+*/
+$PDO = new CN();
+$stmt = $PDO->verfUSER($user,$senha);
+/*
   if($result > 0){
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     if($row['user'] == $user && $row['senha'] == $senha){
@@ -32,7 +36,7 @@ try{
       }else{
         $_SESSION['coord'] = "";
       }
-      header("Location: /cbpf");
+      header("Location: principal");
     }else{
       echo "Login ou senha incorretos";
       header("Location:login.php?err=1");exit;
@@ -41,8 +45,9 @@ try{
     echo "Login não encontrado";
     header("Location: login.php?err=2");exit;
   }
-}catch(PDOException $e){
-  echo "ERROR: " . $e->getMessage();
-}
+*/
+//}catch(PDOException $e){
+  //echo "ERROR: " . $e->getMessage();
+//}
 
  ?>
