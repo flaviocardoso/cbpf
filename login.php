@@ -1,3 +1,21 @@
+<?php
+include_once("config/maining/path/biblio.php");
+$flag = "";
+if(isset($_POST["submit"]))
+{
+  include_once("config/maining/path/Connection.php");
+
+  $user = entrada($_POST['user']);
+  $senha = entrada($_POST['senha']);
+  $PDO = new CN();
+  $flag = $PDO->verfUSER($user,$senha);
+
+  if ($flag == "OK")
+  {
+    header("Location: principal");exit;
+  }
+}
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,9 +26,10 @@
     <body>
         <header>
             <p>Login</p>
+            <? verfFlag($flag); ?>
         </header>
         <section>
-            <form action="verificar.php" method="post">
+            <form action="login" method="post" enctype="multipart/form-data">
                 <table>
                     <tr>
                         <td align="right">Login : </td>
@@ -25,13 +44,8 @@
                     </tr>
                 </table>
                 <br/><br/>
-                <input type="submit" value="Enviar"/>
+                <input type="submit" name="submit" value="Enviar"/>
             </form>
-            <p>
-                <?php
-                #include("cadastro.php");
-                ?>
-            </p>
         </section>
     </body>
 </html>
