@@ -1,8 +1,48 @@
+Order Deny,Allow
+Deny from all
+Allow from 127.0.0.1
+<FilesMatch ".*\.(css|js|php)$">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+<FilesMatch "login$">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+<FilesMatch "logout$">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+<FilesMatch "principal$">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+<FilesMatch "(.*OS)$">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+#Permitindo acesso ao handler e sub
+<FilesMatch "os$">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+<FilesMatch "testes$">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+<Files conexao.php>
+  Order Deny,Allow
+  Deny from all
+</Files>
+Options -Indexes
 Options FollowSymLinks
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteBase /cbpf
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^principal principal.php
+RewriteRule ^login login.php
+RewriteRule ^logout logout.php
 RewriteRule ^criarOS criar_orderservice.php
 RewriteRule ^coordOS coord_orderservice.php
 RewriteRule ^setorOS orderserviceporsetor.php
@@ -11,3 +51,4 @@ RewriteRule ^tecnOS tecnico_orderservices.php
 RewriteRule ^os/stylesheet/screen.css$ stylesheet/screen.css
 RewriteRule ^os/js/animation.js$ js/animation.js
 RewriteRule ^os/([0-9]+)$ ver_os.php?id=$1 [QSA,NC,L]
+RewriteRule ^os/([0-9]+)/edit$ ver_os.php?id=$1&edit=on [QSA,NC,L]
