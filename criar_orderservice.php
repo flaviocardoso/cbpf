@@ -82,12 +82,16 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
                 <option value="segu">Segurança de Rede</option>
               </select>
           </fieldset>
+          <fieldset>
+              <legend>Arquivos</legend>
+              <input type="file" name="arquivo[]" multiple/>
+          </fieldset>    
           <br/>
           <fieldset>
             <legend>Descrição do serviço</legend>
             <textarea id="descr" name="descr" cols="30" rows="10" form="form_os"></textarea><br/><br/>
             <button type="submit" formaction="enviar_orderservice.php">Confirmar</button>
-            <button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>
+            <!--<button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>-->
           </fieldset>
         </fieldset>
 
