@@ -9,8 +9,8 @@ if (!isset($_SESSION['user'])) {
     header("Location: login.php"); exit;
 }
 
-include("conexao.php");
-include("biblio.php");
+include("config/maining/path/conexao.php");
+include("config/maining/path/biblio.php");
 
 //session_start();
 $coord = $_SESSION["coord"];
@@ -48,7 +48,7 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
               echo "$value[laudo]<br>";
               echo "$value[data_ultima]<br>";
               echo "$value[hora_ultima]<br>";
-              echo "<a href=\"#!$value[id]\">Acessar</a><br>";
+              echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
             }
         ?>
       </table>
