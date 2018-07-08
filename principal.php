@@ -32,6 +32,7 @@
         <title>Página principal</title>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="js/vue.js"></script>
 
     </head>
@@ -58,23 +59,60 @@
         </header>
         <section>
           <p>
-            <a href="#!criarOS">Criar Ordem de Serviço</a><br>
+            <a href="criarOS" target="_blank">Criar Ordem de Serviço</a><br>
             <a href="#!coordOS">Ordem de serviços por Coordenação</a><br>
             <a href="#!setorOS">Ordem de serviço por setor</a><br>
             <a href="#!solicOS">Ordem de serviço por solicitadas</a><br>
             <a href="#!tecnOS">Ordem de serviço atendidos</a><br>
+            <button type="button" id="button1">Aperte1</button>
+            <button type="button" id="button2">Aperte2</button>
           </p>
             <div ng-view></div>
+            <div id="content"></div>
         </section>
         <script>
           var app = angular.module("myApp", ["ngRoute"]);
           app.config(function($routeProvider) {
           $routeProvider
-          .when("/criarOS", {templateUrl : "criarOS"})
+          //.when("/criarOS", {templateUrl : "criarOS"})
           .when("/coordOS", {templateUrl : "coordOS"})
           .when("/setorOS", {templateUrl : "setorOS"})
           .when("/solicOS", {templateUrl : "solicOS"})
           .when("/tecnOS", {templateUrl : "tecnOS"});
+          });
+          $('#button1').click(function(e) {
+            e.preventDefault();
+            //const nome = $('input[name="nome"]').val();
+            //const email = $('input[name="email"]').val();
+            //const assunto = $('input[name="assunto"]').val();
+            //const mensagem = $('textarea[name="mensagem"]').val();
+            $.ajax({
+                url: 'criarOS', // caminho para o script que vai processar os dados
+                success: function(response) {
+                    $('#content').html(response);
+                },
+                error: function(xhr, status, error) {
+                    alert(xhr.responseText);
+                }
+            });
+            return false;
+          });
+          $('#button2').click(function(e) {
+            e.preventDefault();
+            //const nome = $('input[name="nome"]').val();
+            //const email = $('input[name="email"]').val();
+            //const assunto = $('input[name="assunto"]').val();
+            //const mensagem = $('textarea[name="mensagem"]').val();
+            $.ajax({
+                url: 'coordOS ', // caminho para o script que vai processar os dados
+                success: function(response) {
+                    $('#content').html(response);
+                },
+                error: function(xhr, status, error) {
+                    alert(xhr.responseText);
+                }
+            });
+            return false;
           });
         </script>
     </body>

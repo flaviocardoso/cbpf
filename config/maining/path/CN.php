@@ -33,7 +33,7 @@ class CN
     try
     {
       $sql = "SELECT idos FROM orderservice WHERE nos=:nos";
-      $stmt = $this->link->prepare($sql1);
+      $stmt = $this->link->prepare($sql);
       $stmt->bindParam(':nos', $nos, PDO::PARAM_STR);
       $stmt->execute();
       $count = $stmt->rowCount();
@@ -133,7 +133,7 @@ class CN
     try
     {
       $sql = "INSERT INTO orderservice (idos, user, nos, nome, email, coord, ala, sala, telefone, setor, arq, datahora, descr) VALUES (NULL, :user, :nos, :nome, :email, :coord, :ala, :sala, :telefone, :setor, :arq, :datahora, :descr)";
-      $stmt = $PDO->prepare($sql);
+      $stmt = $this->link->prepare($sql);
 
       $stmt->bindParam(':user', $user, PDO::PARAM_STR);
       $stmt->bindParam(':nos', $nos, PDO::PARAM_STR);
@@ -150,7 +150,7 @@ class CN
 
       $stmt->execute();
 
-      $result = $stmt->rowCount();
+      $count = $stmt->rowCount();
     }
     catch (PDOException $e)
     {
@@ -166,12 +166,12 @@ class CN
     try
     {
       $sql = "INSERT INTO tecnico(idtecn, idos, nome, user, setor, datahora, status, laudo) VALUES(NULL, :id, NULL, NULL, :setor, :datahora, :status, NULL)";
-      $stmt2 = $this->link->prepare($sql);
-      $stmt2->bindParam(':id', $id, PDO::PARAM_INT);
-      $stmt2->bindParam(':setor', $setor, PDO::PARAM_STR);
-      $stmt2->bindParam(':datahora', $dh, PDO::PARAM_STR);
-      $stmt2->bindParam(':status', $status, PDO::PARAM_STR);
-      $stmt2->execute();
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+      $stmt->bindParam(':setor', $setor, PDO::PARAM_STR);
+      $stmt->bindParam(':datahora', $dh, PDO::PARAM_STR);
+      $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+      $stmt->execute();
       $count = $stmt->rowCount();
     }
     catch (PDOException $e)

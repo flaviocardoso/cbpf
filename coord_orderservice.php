@@ -24,6 +24,11 @@ if(isset($coord) and !empty($coord))
     $mens = "<p>Não encontrado!</p>";
   }
 }
+if(isset($_POST["nome"]))
+{
+  echo $_POST["nome"];
+}
+
 ?>
 
 <!--<!DOCTYPE html>
@@ -39,7 +44,11 @@ if(isset($coord) and !empty($coord))
     </header>
     <section>-->
       <? $mens ?>
-      <table>
+      <form id="form_coord" method="post" action="principal">
+        <input type="text" name="nome" id="nome"/>
+        <input type="submit" name="submit" />
+      </form>
+      <p></p>
         <?php
           //print_r($rows1);
           if($count > 0)
@@ -56,15 +65,27 @@ if(isset($coord) and !empty($coord))
             }
           }
         ?>
-      </table>
-      <!--<p>Erros</p>
-      <table>
-        <?php
-          //print_r($rows2);
-          //foreach ($rows2 as $key => $value) {
-          //  echo $rows2[$key] . "   ";
-          //}
-        ?>
-      </table>-->
+    </div>
+    <script>
+      $("#form_coord").submit(function(e)
+      {
+        e.preventDefault();
+        const nome = $("#nome").val();
+        $.ajax({
+          url: "coordOS",
+          type: "POST",
+          data: {nome: nome},
+          success: function(response)
+          {
+            $('#content').html(response);
+          },
+          error: function(xhr, status, error)
+          {
+            alert(xhr.responseText);
+          }
+        });
+      });
+    </script>
+<!--
   </body>
-</html>
+</html>-->

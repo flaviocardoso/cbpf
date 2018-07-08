@@ -7,16 +7,20 @@ if (!isset($_SESSION['user'])) {
     // Destrói a sessão por segurança
     session_destroy();
     // Redireciona o visitante de volta pro login
-    header("Location: login.php"); exit;
+    header("Location: login"); exit;
 }
+include_once("config/maining/path/biblio.php");
+//var_dump($_FILES);
+
 $mensErroArq = "";
 $mensErro = "";
 $mensOS = "";
-echo "string1";
+//echo "string1";
 //post isset não funcionando!!!
-if(isset($_POST["submit"]))
+//echo $_POST['submit'];
+if(!empty($_POST['submit']))
 {
-  echo "string2";
+  //echo "string2";
   $nome = entrada($_POST["nome"]);
   $email = entrada($_POST["email"]);
   $coord = entrada($_POST["coord"]);
@@ -25,26 +29,47 @@ if(isset($_POST["submit"]))
   $telefone = entrada($_POST["telefone"]);
   $setor = entrada($_POST["setor"]);
   $descr = entrada($_POST["descr"]);
-
+  $_POST["submit"] = "";
   $dt = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
   $nos = $coord."/".$dt->format('YmdHis');
   $dh = $dt->format('Y-m-d H:i:s');
+  $arq = "";
+  //var_dump($_FILES);
 
-  if(!empty($_FILES['arq']))
+  if(!empty($_FILES['arquivo']["name"]))
   {
-  $path = '/opt/lampp/htdocs/cbpf/conec/data/uploads/';
-  //$dt = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
-  $forderdh = $dt->format('Y/m/d/H/i/s/');
-
-  $path = $path . $forderdh;
-  $arq_name = $path . $_FILES['arq']['name'];
-  $_SESSION["arq_name"] = $arq_name;
-  $_SESSION["forders"] = $forderdh;
-
+    $path_root = $_SERVER["DOCUMENT_ROOT"];
+    $path = "/cbpf/conec/data/uploads/";
+    //'/opt/lampp/htdocs/cbpf/conec/data/uploads/';
+    //$dt = new DateTime('now', new DateTimeZone('America/Sao_Paulo'));
+    $forder = $dt->format('Y/m/d/H/i/s/');
+    $arq_name = $_FILES["arquivo"]["name"];
+    $arq_tmp = $_FILES["arquivo"]["tmp_name"];
+    if(!is_dir("{$path_root}{$path}{$forder}"))
+    {
+      mkdir("{$path_root}{$path}{$forder}", 0777, true);
+    }
+    if(move_uploaded_file($arq_tmp, $path_root . $path . $forder . $arq_name))
+    {
+      $arq = $path_root . $path . $forder . $arq_name;
+      //echo $arq;
+    }
+    else
+    {
+      echo "Don't file upload";
+      var_dump($_FILES["arquivo"]);
+      exit;
+    }
+  //$forder = $forderdh;
+  //$path = $path . $forderdh;
+  //$arq = $path . $_FILES['arquivo']['name'];
+  //$_SESSION["arq_name"] = $arq;
+  //$_SESSION["arq_tmp"] = $_FILES['arquivo']['tmp_name'];
+  //$_SESSION["forders"] = $forderdh;
   }
   else
   {
-    $mensErroArq = "<p>Erro de Arquivo</p>";
+    $mensErroArq = "<p>Arquivo Vazio</p>";
   }
   include("config/maining/path/CN.php");
   $PDO = new CN();
@@ -61,10 +86,10 @@ if(isset($_POST["submit"]))
     if($counti2 > 0)
     {
       $status = "NOVA";
-      $rwci3 = $PDO->inserirTecnNOVAOS($rowsi2["id"], $setor, $dh, $status);
+      $rwci3 = $PDO->inserirTecnNOVAOS($rowsi2["idos"], $setor, $dh, $status);
       $counti3 = $rwci3[0];
       if($counti3 > 0){
-        header("Location: conec/data/uploads.php");
+        //header("Location: criarOS");
         $mensOS = "Ordem de Serviço Criada!";
       }else{
         $mensErro = "<p>rwci3 erro!</p>";
@@ -78,7 +103,6 @@ if(isset($_POST["submit"]))
   }
 }
 
-include_once("config/maining/path/biblio.php");
 $mens = "";
 $rows1 = array();
 $count = 0;
@@ -102,34 +126,31 @@ $stmt->execute();
 $count = $stmt->rowCount();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 */
+var_dump($_POST);
+var_dump($_FILES);
 ?>
-
-<!--<!DOCTYPE html>
+<!--
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
     <meta content="width=device-width initial-scale=1 maximum-scale=1" name="viewport">
     <title>Criar ordem de serviço</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   </head>
   <body>
     <header>
       <p>Criando a ordem de serviço</p>
-    </header>
-    <section>-->
+    </header>-->
     <? echo $mensErroArq; ?>
     <? echo $mensErro; ?>
     <? echo $mensOS; ?>
     <? echo $mens; ?>
-      <form id="form_os" method="post" action="principal#!/criarOS" enctype="multipart/form-data">
+    <? //echo $_FILES["arquivo"]["name"]; ?>
+      <form id="form_os" method="post" action="principal">
         <fieldset>
           <legend>Criando Ordem de Serviço</legend>
-          <!--<fieldset>
-            <legend>Número de OS</legend>
-            <input id="nos" type="text" name="nos" value="<?php echo $nos; ?>" required/>
-          </fieldset>
-          <br/>-->
-          <fieldset>
+           <fieldset>
             <legend>Dados do solicitante</legend>
             <fieldset>
               <legend>Solicitante</legend>
@@ -157,7 +178,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             </fieldset>
             <fieldset>
               <legend>Setor de destinação</legend>
-              <select name="setor">
+              <select name="setor" id="setor" required>
                 <option value=""></option>
                 <option value="comp">Computação</option>
                 <option value="elet">Eletrônica</option>
@@ -169,20 +190,55 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
               </select>
           </fieldset>
           <fieldset>
-              <legend>Arquivos</legend>
-              <input type="file" name="arq"/>
+            <legend>Enviar arquivo</legend>
+            <input type="file" name="arquivo" id="arquivo"/>
           </fieldset>
-          <br/>
           <fieldset>
             <legend>Descrição do serviço</legend>
             <textarea id="descr" name="descr" cols="30" rows="10" form="form_os"></textarea><br/><br/>
-            <input type="submit" name="submit"/>Confirmar</button>
+            <input type="submit" id="submit" name="submit"/>
             <!--<button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>-->
           </fieldset>
         </fieldset>
-
+      </fieldset>
       </form>
-    <!--</section-->
+      <script>
+      $('#form_os').submit(function(e) {
+        e.preventDefault();
+        //const nome = $('input[name="nome"]').val();
+        //const email = $('#email').val();
+        //const coord = $('#coord').val();
+        //const ala = $('#ala').val();
+        //const sala = $('#sala').val();
+        //const telefone = $('#telefone').val();
+        //const setor = $('#setor').val();
+        //const arquivo = $('#arquivo').val();
+        //{submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, telefone: telefone, setor: setor, descr: descr},
+        var formData = new FormData($(this)[0]);
+        //const descr = $('#descr').val();
+        //const submit = $('input[name="submit"]').val();
+        //var formData = new FormData(this);
+        $.ajax({
+            url: 'criarOS', // caminho para o script que vai processar os dados
+            type: 'POST',
+            data: formData,
+            //contentType: false,
+            //processData: false,
+            //data: {submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, arquivo: arquivo, telefone: telefone, setor: setor, descr: descr},
 
-  </body>
-</html>
+            success: function(response) {
+                $('#content').html(response);
+            },
+            error: function(xhr, status, error) {
+                alert(xhr.responseText);
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+        return false;
+      });
+
+      </script>
+<!--  </body>
+</html>-->
