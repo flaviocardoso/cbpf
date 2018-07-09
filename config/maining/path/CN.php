@@ -245,6 +245,88 @@ class CN
     }
     return array($rows, $count);
   }
+
+  public function orderServicePorID($id)
+  {
+    $row = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT idos as id, user, nos, nome as solicitante, descr, setor, date_format(datahora, '%d/%m/%Y') as data, TIME(datahora) as hora FROM orderservice WHERE idos=:id";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+      $stmt->execute();
+      $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+      $count = $stmt->rowCount();
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+
+  public function buscaUser($user)
+  {
+    $row = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT nome, email, telefone, sala, coord, ala FROM usuario WHERE user=:user";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":user", $user, PDO::PARAM_STR);
+      $stmt->execute();
+      $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+      $count = $stmt->rowCount();
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+
+  public function buscaTecnLaudoPorID($id)
+  {
+    $row = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT nome, datahora, status, laudo FROM tecnico WHERE idos=:id order by datahora desc";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+      $stmt->execute();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $count = $stmt->rowCount();
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+
+    return array($rows, $count);
+  }
+
+  public function orderServiceUserPorID($id)
+  {
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT os.nos as nos, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, us.nome as nome, us.email as email, us.telefone as telefone, us.sala as sala, us.coord as coord, us.ala as ala FROM orderservice os INNER JOIN (SELECT user, nome, email, telefone, sala, coord, ala FROM usuario) us USING(user) WHERE os.idos=:id";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+      $stmt->execute();
+      $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+      $count = $stmt->rowCount();
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
 }
+
 
 ?>
