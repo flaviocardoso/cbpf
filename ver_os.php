@@ -8,13 +8,25 @@ if (!isset($_SESSION['user'])) {
     // Redireciona o visitante de volta pro login
     header("Location: login.php"); exit;
 }
-include("conexao.php");
-
+include_once("config/maining/path/CN.php");
+$PDO = new CN();
 $id = $_GET["id"];
 $rows1 = "";
 $rows2 = "";
 $rows3 = "";
+
+//$rwc1 = $PDO->orderServicePorID($id);
+//$rows1 = $rwc1[0];
+//$count1 = $rwc1[1];
+$rwc2 = $PDO->orderServiceUserPorID($id);//buscaUser($rows1["user"]);
+$rows2 = $rwc2[0];
+$count2 = $rwc2[1];
+$rwc3 = $PDO->buscaTecnLaudoPorID($id);
+$rows3 = $rwc3[0];
+$count3 = $rwc3[1];
+//echo $count1;
 //echo $id;
+/*
 $sql1 = "SELECT idos as id, user, nos, nome as solicitante, descr, setor, DATE(datahora) as data, TIME(datahora) as hora FROM orderservice WHERE idos=:id";
 $stmt1 = $PDO->prepare($sql1);
 $stmt1->bindParam(":id", $id, PDO::PARAM_INT);
@@ -41,6 +53,7 @@ $result3 = $stmt3->rowCount();
 if($result3 > 0){
   $rows3 = $stmt3->fetchAll(PDO::FETCH_ASSOC);
 }
+*/
  ?>
 <!DOCTYPE html>
 <html>
@@ -60,7 +73,7 @@ if($result3 > 0){
           <legend>Ver Ordem de Serviço</legend>
           <fieldset id="prot">
             <legend>Protocolo</legend>
-            <span id="nos"><? echo $rows1["nos"]; ?></span>
+            <span id="nos"><? echo $rows2["nos"]; ?></span>
           </fieldset>
           <div id="solic">
             <div id="dados">
@@ -80,7 +93,7 @@ if($result3 > 0){
               <fieldset>
                 <legend>Descrição</legend>
                 <div id="div_descr">
-                  <? echo $rows1["descr"]; ?>
+                  <? echo $rows2["descr"]; ?>
                 </div>
               </fieldset>
             </div>
