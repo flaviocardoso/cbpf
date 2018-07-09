@@ -30,11 +30,16 @@
         <meta charset="utf-8">
         <meta content="width=device-width initial-scale=1 maximum-scale=1" name="viewport">
         <title>Página principal</title>
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquerymobile/1.4.5/jquery.mobile.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="js/vue.js"></script>
-
+        <style>
+          li{ cursor: pointer; }
+        </style>
     </head>
     <body ng-app="myApp">
         <header>
@@ -42,78 +47,44 @@
             <?
             //if($nivel < 3)
             //{
-            echo $linperfil;
-            echo $linkcriar;
-            echo $linkcoordS;
+            //echo $linperfil;
+            //echo $linkcriar;
+            //echo $linkcoordS;
             //
             //}
             //else
             //{
-            echo $linksetorS;
-            echo $linksolS;
-            echo $linktecS;
+            //echo $linksetorS;
+            //echo $linksolS;
+            //echo $linktecS;
             //}
 
-            echo $linkLogout;
+            //echo $linkLogout;
             ?>
         </header>
         <section>
-          <p>
+          <!--<p>
             <a href="criarOS" target="_blank">Criar Ordem de Serviço</a><br>
             <a href="#!coordOS">Ordem de serviços por Coordenação</a><br>
             <a href="#!setorOS">Ordem de serviço por setor</a><br>
             <a href="#!solicOS">Ordem de serviço por solicitadas</a><br>
             <a href="#!tecnOS">Ordem de serviço atendidos</a><br>
-            <button type="button" id="button1">Aperte1</button>
-            <button type="button" id="button2">Aperte2</button>
+            <button type="button" id="criarOS">Criar OS</button>
+            <button type="button" id="coordOS">Coordenação OS</button>
+            <button type="button" id="setorOS">Setor OS</button>
+            <button type="button" id="solicOS">Solicitações OS</button>
+            <button type="button" id="tecnOS">Tecnico OS</button>-->
+            <ul>
+              <li id="criarOS">Criar OS</li>
+              <li id="coordOS">Coordenação OS</li>
+              <li id="setorOS">Setor OS</li>
+              <li id="solicOS">Solicitações OS</li>
+              <li id="tecnOS">Tecnico OS</li>
+            </ul>
           </p>
             <div ng-view></div>
             <div id="content"></div>
         </section>
-        <script>
-          var app = angular.module("myApp", ["ngRoute"]);
-          app.config(function($routeProvider) {
-          $routeProvider
-          //.when("/criarOS", {templateUrl : "criarOS"})
-          .when("/coordOS", {templateUrl : "coordOS"})
-          .when("/setorOS", {templateUrl : "setorOS"})
-          .when("/solicOS", {templateUrl : "solicOS"})
-          .when("/tecnOS", {templateUrl : "tecnOS"});
-          });
-          $('#button1').click(function(e) {
-            e.preventDefault();
-            //const nome = $('input[name="nome"]').val();
-            //const email = $('input[name="email"]').val();
-            //const assunto = $('input[name="assunto"]').val();
-            //const mensagem = $('textarea[name="mensagem"]').val();
-            $.ajax({
-                url: 'criarOS', // caminho para o script que vai processar os dados
-                success: function(response) {
-                    $('#content').html(response);
-                },
-                error: function(xhr, status, error) {
-                    alert(xhr.responseText);
-                }
-            });
-            return false;
-          });
-          $('#button2').click(function(e) {
-            e.preventDefault();
-            //const nome = $('input[name="nome"]').val();
-            //const email = $('input[name="email"]').val();
-            //const assunto = $('input[name="assunto"]').val();
-            //const mensagem = $('textarea[name="mensagem"]').val();
-            $.ajax({
-                url: 'coordOS ', // caminho para o script que vai processar os dados
-                success: function(response) {
-                    $('#content').html(response);
-                },
-                error: function(xhr, status, error) {
-                    alert(xhr.responseText);
-                }
-            });
-            return false;
-          });
-        </script>
+        <script src="js/form3.js"></script>
     </body>
 </html>

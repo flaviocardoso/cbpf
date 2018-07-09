@@ -26,9 +26,9 @@ if(isset($coord) and !empty($coord))
 }
 if(isset($_POST["nome"]))
 {
-  echo $_POST["nome"];
+  echo entrada($_POST["nome"]);
 }
-
+echo $_POST["hander"];
 ?>
 
 <!--<!DOCTYPE html>
@@ -44,9 +44,9 @@ if(isset($_POST["nome"]))
     </header>
     <section>-->
       <? $mens ?>
-      <form id="form_coord" method="post" action="principal">
+      <form id="form_data" action="principal" method="post">
         <input type="text" name="nome" id="nome"/>
-        <input type="submit" name="submit" />
+        <input type="submit" id="submit" name="submit" value="Enviar"/>
       </form>
       <p></p>
         <?php
@@ -61,30 +61,37 @@ if(isset($_POST["nome"]))
               echo "$value[laudo]<br>";
               echo "$value[data_ultima]<br>";
               echo "$value[hora_ultima]<br>";
+              if($value["arquivo"]) echo "$value[arquivo]<br>";
               echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
             }
           }
         ?>
     </div>
     <script>
-      $("#form_coord").submit(function(e)
-      {
-        e.preventDefault();
-        const nome = $("#nome").val();
-        $.ajax({
-          url: "coordOS",
-          type: "POST",
-          data: {nome: nome},
-          success: function(response)
-          {
-            $('#content').html(response);
-          },
-          error: function(xhr, status, error)
-          {
-            alert(xhr.responseText);
-          }
-        });
+    $("#form_data").submit(function(e)
+    {
+      e.preventDefault();
+      var formData = new FormData($(this)[0]);
+      formData.append("hander", "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>");
+      $.ajax({
+        url: "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>",
+        type: "POST",
+        data: formData,
+        success: function(response)
+        {
+          $('#content').html(response);
+        },
+        error: function(xhr, status, error)
+        {
+          alert(xhr.responseText);
+        },
+        async: false,
+        cache: false,
+        contentType: false,
+        processData: false
       });
+      return false;
+    });
     </script>
 <!--
   </body>

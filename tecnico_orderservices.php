@@ -35,7 +35,13 @@ $stmt1->execute();
 $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
 //print_r($rows1);
 */
+if(isset($_POST["nome"]))
+{
+  echo entrada($_POST["nome"]);
+}
+echo $_POST["hander"];
 ?>
+<!--
 <!DOCTYPE html>
 <html>
   <head>
@@ -46,10 +52,14 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
   <body>
     <header>
       <p>Ordens de Serviços</p>
-    </header>
+    </header> -->
     <section>
       <? $mens; ?>
-      <table>
+      <form id="form_data" action="principal" method="post">
+        <input type="text" name="nome" id="nome"/>
+        <input type="submit" id="submit" name="submit" value="Enviar"/>
+      </form>
+      <div>
         <?php
         if($count > 0)
         {
@@ -60,10 +70,47 @@ $rows1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
             echo "$value[laudo]<br>";
             echo "$value[data_ultima]<br>";
             echo "$value[hora_ultima]<br>";
-            echo "<a href=\"ver_os.php?id=$value[id]\" target=\"_blank\">Acessar</a><br>";
-            // code...
+            if($value["arquivo"])
+            {
+              echo "$value[arquivo]<br>";
+              header('Content-type: ' . $value["arqtype"]);
+              header('Content-Disposition: inline; filename="' . $value["arqname"] . '"');
+              header('Content-Transfer-Encoding: binary');
+              header('Content-Length: ' . filesize($value["arquivo"]));
+              header('Accept-Ranges: bytes');
+
+              @readfile($value[arquivo]);
+            }
+            echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
           }
         }
         ?>
+      </div>
+      <script>
+      $("#form_data").submit(function(e)
+      {
+        e.preventDefault();
+        var formData = new FormData($(this)[0]);
+        formData.append("hander", "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>");
+        $.ajax({
+          url: "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>",
+          type: "POST",
+          data: formData,
+          success: function(response)
+          {
+            $('#content').html(response);
+          },
+          error: function(xhr, status, error)
+          {
+            alert(xhr.responseText);
+          },
+          async: false,
+          cache: false,
+          contentType: false,
+          processData: false
+        });
+        return false;
+      });
+      </script>
   </body>
 </html>

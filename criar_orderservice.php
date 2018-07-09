@@ -34,10 +34,13 @@ if(!empty($_POST['submit']))
   $nos = $coord."/".$dt->format('YmdHis');
   $dh = $dt->format('Y-m-d H:i:s');
   $arq = "";
+  $arq_name = "";
+  $arq_type = "";
   //var_dump($_FILES);
 
   if(!empty($_FILES['arquivo']["name"]))
   {
+    //pega caminho principal
     $path_root = $_SERVER["DOCUMENT_ROOT"];
     $path = "/cbpf/conec/data/uploads/";
     //'/opt/lampp/htdocs/cbpf/conec/data/uploads/';
@@ -45,6 +48,7 @@ if(!empty($_POST['submit']))
     $forder = $dt->format('Y/m/d/H/i/s/');
     $arq_name = $_FILES["arquivo"]["name"];
     $arq_tmp = $_FILES["arquivo"]["tmp_name"];
+    $arq_type = $_FILES["arquivo"]["type"];
     if(!is_dir("{$path_root}{$path}{$forder}"))
     {
       mkdir("{$path_root}{$path}{$forder}", 0777, true);
@@ -67,13 +71,9 @@ if(!empty($_POST['submit']))
   //$_SESSION["arq_tmp"] = $_FILES['arquivo']['tmp_name'];
   //$_SESSION["forders"] = $forderdh;
   }
-  else
-  {
-    $mensErroArq = "<p>Arquivo Vazio</p>";
-  }
   include("config/maining/path/CN.php");
   $PDO = new CN();
-  $rwci1 = $PDO->inserirOS($user, $nos, $nome, $email, $coord, $ala, $sala, $telefone, $setor, $arq, $dh, $descr);
+  $rwci1 = $PDO->inserirOS($user, $nos, $nome, $email, $coord, $ala, $sala, $telefone, $setor, $arq_name, $arq, $arq_type, $dh, $descr);
   $rowsi1 = $rwci1[0];
   $counti1 = $rwci1[1];
 
@@ -126,8 +126,8 @@ $stmt->execute();
 $count = $stmt->rowCount();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 */
-var_dump($_POST);
-var_dump($_FILES);
+//var_dump($_POST);
+//var_dump($_FILES);
 ?>
 <!--
 <!DOCTYPE html>
@@ -195,8 +195,8 @@ var_dump($_FILES);
           </fieldset>
           <fieldset>
             <legend>Descrição do serviço</legend>
-            <textarea id="descr" name="descr" cols="30" rows="10" form="form_os"></textarea><br/><br/>
-            <input type="submit" id="submit" name="submit"/>
+            <textarea id="descr" name="descr" cols="30" rows="10" form="form_os" required></textarea><br/><br/>
+            <input type="submit" id="submit" name="submit" form="form_os" value="Enviar"/>
             <!--<button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>-->
           </fieldset>
         </fieldset>
@@ -216,7 +216,8 @@ var_dump($_FILES);
         //{submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, telefone: telefone, setor: setor, descr: descr},
         var formData = new FormData($(this)[0]);
         //const descr = $('#descr').val();
-        //const submit = $('input[name="submit"]').val();
+        const submit = $('input[name="submit"]').val();
+        formData.append("submit", submit);
         //var formData = new FormData(this);
         $.ajax({
             url: 'criarOS', // caminho para o script que vai processar os dados
@@ -238,7 +239,6 @@ var_dump($_FILES);
         });
         return false;
       });
-
       </script>
 <!--  </body>
 </html>-->

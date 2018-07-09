@@ -24,8 +24,13 @@ if(isset($user) and !empty($user))
     $mens = "<p>Não encontrado</p>";
   }
 }
+if(isset($_POST["nome"]))
+{
+  echo entrada($_POST["nome"]);
+}
+echo $_POST["hander"];
 ?>
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -35,22 +40,56 @@ if(isset($user) and !empty($user))
   <body>
     <header>
       <p>Seus Pedidos</p>
-    </header>
+    </header> -->
     <section>
       <? $mens ?>
-      <table>
+      <form id="form_data" action="principal" method="post">
+        <input type="text" name="nome" id="nome"/>
+        <input type="submit" id="submit" name="submit" value="Enviar"/>
+      </form>
+      <div>
         <?php
           //print_r($rows1);
           if ($count > 0){
             foreach ($rows1 as $key => $value) {
-              //print_r($value);//ex.: $value['id']
               echo "$value[descr]<br>";
+              echo "$value[data]<br>";
+              echo "$value[hora]<br>";
               echo "$value[laudo]<br>";
-              echo "$value[id]<br>";
+              echo "$value[data_ultima]<br>";
+              echo "$value[hora_ultima]<br>";
+              if($value["arquivo"]) echo "$value[arquivo]<br>";
+              echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
             }
           }
 
         ?>
-      </table>
+      </div>
+      <script>
+      $("#form_data").submit(function(e)
+      {
+        e.preventDefault();
+        var formData = new FormData($(this)[0]);
+        formData.append("hander", "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>");
+        $.ajax({
+          url: "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>",
+          type: "POST",
+          data: formData,
+          success: function(response)
+          {
+            $('#content').html(response);
+          },
+          error: function(xhr, status, error)
+          {
+            alert(xhr.responseText);
+          },
+          async: false,
+          cache: false,
+          contentType: false,
+          processData: false
+        });
+        return false;
+      });
+      </script>
   </body>
 </html>

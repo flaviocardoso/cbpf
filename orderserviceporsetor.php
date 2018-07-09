@@ -25,7 +25,13 @@ if(isset($setor) and !empty($setor))
     $mens = "Não encontrado!";
   }
 }
+if(isset($_POST["nome"]))
+{
+  echo entrada($_POST["nome"]);
+}
+echo $_POST["hander"];
 ?>
+<!--
   <!DOCTYPE html>
   <html>
     <head>
@@ -36,7 +42,11 @@ if(isset($setor) and !empty($setor))
     <body>
       <header>
         <p>Ordens de Serviços</p>
-      </header>
+      </header> -->
+      <form id="form_data" action="principal" method="post">
+        <input type="text" name="nome" id="nome"/>
+        <input type="submit" id="submit" name="submit" value="Enviar"/>
+      </form>
       <section>
         <? $mens ?>
         <table>
@@ -45,13 +55,41 @@ if(isset($setor) and !empty($setor))
           {
             foreach ($rows1 as $key => $value) {
               echo "$value[descr]<br>";
+              echo "$value[data]<br>";
+              echo "$value[hora]<br>";
               echo "$value[laudo]<br>";
-              echo "$value[dhultima]<br>";
-              echo "<a href=\"ver_os.php?id=$value[id]\" target=\"_blank\">Acessar</a><br>";
-              // code...
+              echo "$value[data_ultima]<br>";
+              echo "$value[hora_ultima]<br>";
+              if($value["arquivo"]) echo "$value[arquivo]<br>";
+              echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
             }
           }
           ?>
         </table>
-    </body>
-  </html>
+        <script>
+        $("#form_data").submit(function(e)
+        {
+          e.preventDefault();
+          var formData = new FormData($(this)[0]);
+          formData.append("hander", "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>");
+          $.ajax({
+            url: "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>",
+            type: "POST",
+            data: formData,
+            success: function(response)
+            {
+              $('#content').html(response);
+            },
+            error: function(xhr, status, error)
+            {
+              alert(xhr.responseText);
+            },
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false
+          });
+        });
+        </script>
+<!--    </body>
+  </html> -->
