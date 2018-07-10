@@ -86,10 +86,13 @@ function verfFlag($flag)
 {
   switch ($flag) {
     case "PWORUSERWRONG":
-      echo "<p>Login ou Senha errado!</p>";
+      echo "<p>Login ou Senha errados!</p>";
       break;
     case "USERNOFOUND":
       echo "<p>Login não encontrado!</p>";
+      break;
+    case "CADASTRAR":
+      echo "<p>Cadrastre-se em um coordenador/a ou secretaria/o de sua coordenação</p>";
       break;
   }
 }
