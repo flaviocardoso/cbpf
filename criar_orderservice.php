@@ -90,7 +90,12 @@ if(!empty($_POST['submit']))
       $counti3 = $rwci3[0];
       if($counti3 > 0){
         //header("Location: criarOS");
+        include_once("config/maining/path/email.php");
+        $solic_email = "flavioc401@gmail.com";
+        $solic_name = "Flavio Cardoso";
+        $assunto = "Service OS CBPF";
         $mensOS = "Ordem de Serviço Criada!";
+        $mens = "<p><b>" . stmpmailer($_SESSION['email'], $_SESSION['nome'], $solic_email, $solic_name, $assunto, $mensOS) . "</b></p>";
       }else{
         $mensErro = "<p>rwci3 erro!</p>";
       }
