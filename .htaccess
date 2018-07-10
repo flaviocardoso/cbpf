@@ -52,3 +52,4 @@ RewriteRule ^os/stylesheet/screen.css$ stylesheet/screen.css
 RewriteRule ^os/js/animation.js$ js/animation.js
 RewriteRule ^os/([0-9]+)$ ver_os.php?id=$1 [QSA,NC,L]
 RewriteRule ^os/([0-9]+)/edit$ ver_os.php?id=$1&edit=on [QSA,NC,L]
+RewriteRule ^os/arquivo/([0-9]+)$ abrir_arquivo.php?id=$1 [QSA,NC,L]

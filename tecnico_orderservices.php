@@ -72,14 +72,7 @@ echo $_POST["hander"];
             echo "$value[hora_ultima]<br>";
             if($value["arquivo"])
             {
-              echo "$value[arquivo]<br>";
-              header('Content-type: ' . $value["arqtype"]);
-              header('Content-Disposition: inline; filename="' . $value["arqname"] . '"');
-              header('Content-Transfer-Encoding: binary');
-              header('Content-Length: ' . filesize($value["arquivo"]));
-              header('Accept-Ranges: bytes');
-
-              @readfile($value[arquivo]);
+              echo "<a href=\"os/arquivo/$value[id]\" target=\"__blank__\">Aquivo</a><br>";
             }
             echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
           }

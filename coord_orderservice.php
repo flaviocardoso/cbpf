@@ -61,7 +61,10 @@ echo $_POST["hander"];
               echo "$value[laudo]<br>";
               echo "$value[data_ultima]<br>";
               echo "$value[hora_ultima]<br>";
-              if($value["arquivo"]) echo "$value[arquivo]<br>";
+              if($value["arquivo"])
+              {
+                echo "<a href=\"os/arquivo/$value[id]\" target=\"__blank__\">Arquivo</a><br>";
+              }
               echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
             }
           }

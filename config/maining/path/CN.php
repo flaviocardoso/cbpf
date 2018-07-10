@@ -313,7 +313,27 @@ class CN
     $count = 0;
     try
     {
-      $sql = "SELECT os.nos as nos, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, us.nome as nome, us.email as email, us.telefone as telefone, us.sala as sala, us.coord as coord, us.ala as ala FROM orderservice os INNER JOIN (SELECT user, nome, email, telefone, sala, coord, ala FROM usuario) us USING(user) WHERE os.idos=:id";
+      $sql = "SELECT os.nos as nos, os.descr as descr, os.setor as setor, os.arq as arquivo, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, us.nome as nome, us.email as email, us.telefone as telefone, us.sala as sala, us.coord as coord, us.ala as ala FROM orderservice os INNER JOIN (SELECT user, nome, email, telefone, sala, coord, ala FROM usuario) us USING(user) WHERE os.idos=:id";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+      $stmt->execute();
+      $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+      $count = $stmt->rowCount();
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+
+  public function buscaArquivoPorID($id)
+  {
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT arq_name as arqname, arq as arquivo, arq_type as arqtype FROM orderservice WHERE idos=:id";
       $stmt = $this->link->prepare($sql);
       $stmt->bindParam(":id", $id, PDO::PARAM_INT);
       $stmt->execute();

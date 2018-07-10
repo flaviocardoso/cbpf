@@ -86,6 +86,7 @@ if($result3 > 0){
                   <div id="div_coord">Coordenação : <span id="coord"><? echo $rows2["coord"]; ?></span></div>
                   <div id="div_ala">Ala : <span id="ala"><? echo $rows2["ala"]; ?></span></div>
                   <div id="div_sala">Sala : <span id="sala"><? echo $rows2["sala"]; ?></span></div>
+                  <? if($rows2["arquivo"]) echo "<div id='div_file'><a href=\"arquivo/$id\" target=\"__blank__\">Aquivo</a><br></div>"; ?>
                 </div>
               </fieldset>
             </div>
