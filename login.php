@@ -1,6 +1,7 @@
 <?php
 include_once("config/maining/path/biblio.php");
 $flag = "";
+$mens = "";
 if(isset($_POST["submit"]))
 {
   include_once("config/maining/path/CN.php");
@@ -29,6 +30,7 @@ if(isset($_POST["submit"]))
             <? verfFlag($flag); ?>
         </header>
         <section>
+          <? $mens; ?>
             <form action="login" method="post" enctype="multipart/form-data">
                 <table>
                     <tr>
