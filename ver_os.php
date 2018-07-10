@@ -14,6 +14,7 @@ $id = $_GET["id"];
 $rows1 = "";
 $rows2 = "";
 $rows3 = "";
+$mens = "";
 
 //$rwc1 = $PDO->orderServicePorID($id);
 //$rows1 = $rwc1[0];
@@ -21,9 +22,35 @@ $rows3 = "";
 $rwc2 = $PDO->orderServiceUserPorID($id);//buscaUser($rows1["user"]);
 $rows2 = $rwc2[0];
 $count2 = $rwc2[1];
+//echo $_POST["submit"];
+if(isset($_POST["submit"]))
+{
+  $status = $_POST["status"];
+  $laudo = $_POST["laudo"];
+
+  $user = $_SESSION["user"];
+  $nome = $_SESSION["nome"];
+  $setor = $_SESSION["setor"];
+
+  $rwc4 = $PDO->inserirTecnAltOS($id, $nome, $user, $setor, $status, $laudo);
+  $count4 = $rwc4[1];
+  if ($count4 > 0)
+  {
+    include_once("config/maining/path/email.php");
+    $solic_email = "flavioc401@gmail.com";
+    $solic_name = "Flavio Cardoso";
+    $assunto = 'Service OS CBPF';
+    $mens = "Tecnico: " . $nome . "<br>" . "Setor: " . $setor . "<br>Status : " . $_POST["status"] . "<br><br>Laudo : <br>" . $_POST["laudo"];
+
+    $mens = stmpmailer($_SESSION['email'], $_SESSION['nome'], $solic_email, $solic_name, $assunto, $mens);
+  }
+}
+
 $rwc3 = $PDO->buscaTecnLaudoPorID($id);
 $rows3 = $rwc3[0];
 $count3 = $rwc3[1];
+
+
 //echo $count1;
 //echo $id;
 /*
@@ -68,7 +95,8 @@ if($result3 > 0){
     <header>
     </header>
     <section>
-      <form action="incluir_laudo.php" method="post" id=form_os>
+      <? $mens; ?>
+      <form action="" method="post" id=form_os>
         <fieldset id="os">
           <legend>Ver Ordem de Serviço</legend>
           <fieldset id="prot">
@@ -86,7 +114,6 @@ if($result3 > 0){
                   <div id="div_coord">Coordenação : <span id="coord"><? echo $rows2["coord"]; ?></span></div>
                   <div id="div_ala">Ala : <span id="ala"><? echo $rows2["ala"]; ?></span></div>
                   <div id="div_sala">Sala : <span id="sala"><? echo $rows2["sala"]; ?></span></div>
-                  <? if($rows2["arquivo"]) echo "<div id='div_file'><a href=\"arquivo/$id\" target=\"__blank__\">Aquivo</a><br></div>"; ?>
                 </div>
               </fieldset>
             </div>
@@ -95,6 +122,7 @@ if($result3 > 0){
                 <legend>Descrição</legend>
                 <div id="div_descr">
                   <? echo $rows2["descr"]; ?>
+                  <? if($rows2["arquivo"]) echo "<div id='div_file'><br><br>Ver arquivo anexado : <a href=\"arquivo/$id\" target=\"__blank\">$rows2[arqnome]</a><br></div>"; ?>
                 </div>
               </fieldset>
             </div>
@@ -120,7 +148,7 @@ if($result3 > 0){
                   <button type="button" onclick="closeScreen()">Cancelar</button>
                 </div>
                 <div id="bot1">
-                  <button type="submit">Confirmar</button>
+                  <input type="submit" name="submit" value="Confirmar"/>
                 </div>
               </div>
             </div>
