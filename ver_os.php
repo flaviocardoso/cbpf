@@ -37,6 +37,7 @@ if(isset($_POST["submit"]))
   if ($count4 > 0)
   {
     include_once("config/maining/path/email.php");
+    //email de teste
     $solic_email = "flavioc401@gmail.com";
     $solic_name = "Flavio Cardoso";
     $assunto = 'Service OS CBPF';

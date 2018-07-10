@@ -91,6 +91,7 @@ if(!empty($_POST['submit']))
       if($counti3 > 0){
         //header("Location: criarOS");
         include_once("config/maining/path/email.php");
+        //email de teste 
         $solic_email = "flavioc401@gmail.com";
         $solic_name = "Flavio Cardoso";
         $assunto = "Service OS CBPF";
