@@ -59,7 +59,7 @@
             //echo $linktecS;
             //}
 
-            //echo $linkLogout;
+            echo $linkLogout;
             ?>
         </header>
         <section>
