@@ -1,4 +1,6 @@
 <?php
+//require 'OrderService.php';
+
 class CN
 {
   protected $link;
@@ -26,7 +28,7 @@ class CN
     }
 
   }
-  public function orderServicePorNOS($nos)
+  public function orderServicePorNOS($OS)
   {
     $rows = array();
     $count = 0;
@@ -34,7 +36,7 @@ class CN
     {
       $sql = "SELECT idos FROM orderservice WHERE nos=:nos";
       $stmt = $this->link->prepare($sql);
-      $stmt->bindParam(':nos', $nos, PDO::PARAM_STR);
+      $stmt->bindParam(':nos', $OS->nos, PDO::PARAM_STR);
       $stmt->execute();
       $count = $stmt->rowCount();
       $rows = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -51,7 +53,7 @@ class CN
     $flag= "";
     try
     {
-      $sql_user = "SELECT nome, user, setor, senha, coord, nivel FROM usuario where user=:user";
+      $sql_user = "SELECT nome, user, email, setor, senha, coord, nivel FROM usuario where user=:user";
       $stmt = $this->link->prepare($sql_user);
       $stmt->bindParam(':user', $user, PDO::PARAM_STR);
       $stmt->execute();
@@ -64,16 +66,20 @@ class CN
           session_start();
           $_SESSION['user'] = $row['user'];
           $_SESSION['nome'] = $row['nome'];
-          $_SESSION['setor'] = $row['setor'];
-          $_SESSION['nivel'] = $row['nivel'];
-          $_SESSION['ativo'] = $row['ativo'];
-          $_SESSION['cadastro'] = $row['cadastro'];
-          if($row['nivel'] < 3){
-            $_SESSION['coord'] = $row['coord'];
-          }else{
-            $_SESSION['coord'] = "";
+          //não aceitar se estiver vázios os campos abaixo -> enviar para cadastramento de usuário
+          if($row['setor'] == "" || $row['nivel'] == "" || $row['email'] == "" || $row['coord'] == "")
+          {
+            $flag = "CADASTRAR";
           }
-          $flag = "OK";
+          else
+          {
+            $_SESSION['setor'] = $row['setor'];
+            $_SESSION['nivel'] = $row['nivel'];
+            $_SESSION['ativo'] = $row['ativo'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['coord'] = $row['coord'];
+            $flag = "OK";
+          }
         }else{
           $flag = "PWORUSERWRONG";
         }
@@ -88,14 +94,14 @@ class CN
     return $flag;
   }
 
-  public function orderServicePorCoord($coord)
+  public function orderServicePorCoord($OS)
   {
     $rows = array();
     $count = 0;
     try{
       $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) WHERE os.coord=:coord";
       $stmt = $this->link->prepare($sql);
-      $stmt->bindParam(":coord", $coord, PDO::PARAM_STR);
+      $stmt->bindParam(":coord", $OS->coord, PDO::PARAM_STR);
       $stmt->execute();
       $count = $stmt->rowCount();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -126,7 +132,7 @@ class CN
     }
     return array($rows, $count);
   }
-  public function inserirOS($user, $nos, $nome, $email, $coord, $ala, $sala, $telefone, $setor, $arq_name, $arq, $arq_type, $dh, $descr)
+  public function inserirOS($OS)
   {
     $rows = array();
     $count = 0;
@@ -135,20 +141,20 @@ class CN
       $sql = "INSERT INTO orderservice (idos, user, nos, nome, email, coord, ala, sala, telefone, setor, arq_name, arq, arq_type, datahora, descr) VALUES (NULL, :user, :nos, :nome, :email, :coord, :ala, :sala, :telefone, :setor, :arqname, :arq, :arqtype, :datahora, :descr)";
       $stmt = $this->link->prepare($sql);
 
-      $stmt->bindParam(':user', $user, PDO::PARAM_STR);
-      $stmt->bindParam(':nos', $nos, PDO::PARAM_STR);
-      $stmt->bindParam(':nome', $nome, PDO::PARAM_STR);
-      $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-      $stmt->bindParam(':coord', $coord, PDO::PARAM_STR);
-      $stmt->bindParam(':ala', $ala, PDO::PARAM_STR);
-      $stmt->bindParam(':sala', $sala, PDO::PARAM_STR);
-      $stmt->bindParam(':telefone', $telefone, PDO::PARAM_STR);
-      $stmt->bindParam(':setor', $setor, PDO::PARAM_STR);
-      $stmt->bindParam(':arqname', $arq_name, PDO::PARAM_STR);
-      $stmt->bindParam(':arq', $arq, PDO::PARAM_STR);
-      $stmt->bindParam(':arqtype', $arq_type, PDO::PARAM_STR);
-      $stmt->bindParam(':datahora', $dh, PDO::PARAM_STR);
-      $stmt->bindParam(':descr', $descr, PDO::PARAM_STR);
+      $stmt->bindParam(':user', $OS->user, PDO::PARAM_STR);
+      $stmt->bindParam(':nos', $OS->nos, PDO::PARAM_STR);
+      $stmt->bindParam(':nome', $OS->nome, PDO::PARAM_STR);
+      $stmt->bindParam(':email', $OS->email, PDO::PARAM_STR);
+      $stmt->bindParam(':coord', $OS->coord, PDO::PARAM_STR);
+      $stmt->bindParam(':ala', $OS->ala, PDO::PARAM_STR);
+      $stmt->bindParam(':sala', $OS->sala, PDO::PARAM_STR);
+      $stmt->bindParam(':telefone', $OS->telefone, PDO::PARAM_STR);
+      $stmt->bindParam(':setor', $OS->setor, PDO::PARAM_STR);
+      $stmt->bindParam(':arqname', $OS->arq_name, PDO::PARAM_STR);
+      $stmt->bindParam(':arq', $OS->arq, PDO::PARAM_STR);
+      $stmt->bindParam(':arqtype', $OS->arq_type, PDO::PARAM_STR);
+      $stmt->bindParam(':datahora', $OS->dh, PDO::PARAM_STR);
+      $stmt->bindParam(':descr', $OS->descr, PDO::PARAM_STR);
 
       $stmt->execute();
 
@@ -161,7 +167,7 @@ class CN
     return array($rows, $count);
   }
 
-  public function inserirTecnNOVAOS($id, $setor, $dh, $status)
+  public function inserirTecnNOVAOS($Tec)
   {
     $rows = array();
     $count = 0;
@@ -169,10 +175,10 @@ class CN
     {
       $sql = "INSERT INTO tecnico(idtecn, idos, nome, user, setor, datahora, status, laudo) VALUES(NULL, :id, NULL, NULL, :setor, :datahora, :status, NULL)";
       $stmt = $this->link->prepare($sql);
-      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-      $stmt->bindParam(':setor', $setor, PDO::PARAM_STR);
-      $stmt->bindParam(':datahora', $dh, PDO::PARAM_STR);
-      $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+      $stmt->bindParam(':id', $Tec->id, PDO::PARAM_INT);
+      $stmt->bindParam(':setor', $Tec->setor, PDO::PARAM_STR);
+      $stmt->bindParam(':datahora', $Tec->dh, PDO::PARAM_STR);
+      $stmt->bindParam(':status', $Tec->status, PDO::PARAM_STR);
       $stmt->execute();
       $count = $stmt->rowCount();
     }
@@ -183,7 +189,7 @@ class CN
     return array($rows, $count);
   }
 
-  public function orderServicePorSetor($setor)
+  public function orderServicePorSetor($OS)
   {
     $rows = array();
     $count = 0;
@@ -191,7 +197,7 @@ class CN
     {
       $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where te.setor=:setor";
       $stmt = $this->link->prepare($sql);
-      $stmt->bindParam(':setor', $setor, PDO::PARAM_STR);
+      $stmt->bindParam(':setor', $OS->setor, PDO::PARAM_STR);
       $stmt->execute();
       $count = $stmt->rowCount();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -203,7 +209,7 @@ class CN
     return array($rows, $count);
   }
 
-  public function orderServicePorSolic($user)
+  public function orderServicePorSolic($OS)
   {
     $row = array();
     $count = 0;
@@ -212,7 +218,7 @@ class CN
       $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora,  os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where os.user=:user";
       //$sql1 = "SELECT * FROM tecnico as JOIN orderservice as os using "
       $stmt = $this->link->prepare($sql);
-      $stmt->bindParam(':user', $user, PDO::PARAM_STR);
+      $stmt->bindParam(':user', $OS->user, PDO::PARAM_STR);
       $stmt->execute();
       $count = $stmt->rowCount();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -224,7 +230,7 @@ class CN
     return array($rows, $count);
   }
 
-  public function orderServicePorTec($user, $setor)
+  public function orderServicePorTec($OS)
   {
     $row = array();
     $count = 0;
@@ -233,8 +239,8 @@ class CN
       $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) WHERE te.user=:user and te.setor=:setor";
 
       $stmt = $this->link->prepare($sql);
-      $stmt->bindParam(":user", $user, PDO::PARAM_STR);
-      $stmt->bindParam(":setor", $setor, PDO::PARAM_STR);
+      $stmt->bindParam(":user", $OS->user, PDO::PARAM_STR);
+      $stmt->bindParam(":setor", $OS->setor, PDO::PARAM_STR);
       $stmt->execute();
       $count = $stmt->rowCount();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -313,7 +319,7 @@ class CN
     $count = 0;
     try
     {
-      $sql = "SELECT os.nos as nos, os.descr as descr, os.setor as setor, os.arq as arquivo, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, us.nome as nome, us.email as email, us.telefone as telefone, us.sala as sala, us.coord as coord, us.ala as ala FROM orderservice os INNER JOIN (SELECT user, nome, email, telefone, sala, coord, ala FROM usuario) us USING(user) WHERE os.idos=:id";
+      $sql = "SELECT os.nos as nos, os.descr as descr, os.setor as setor, os.arq as arquivo, os.arq_name as arqnome, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, us.nome as nome, us.email as email, us.telefone as telefone, us.sala as sala, us.coord as coord, us.ala as ala FROM orderservice os INNER JOIN (SELECT user, nome, email, telefone, sala, coord, ala FROM usuario) us USING(user) WHERE os.idos=:id";
       $stmt = $this->link->prepare($sql);
       $stmt->bindParam(":id", $id, PDO::PARAM_INT);
       $stmt->execute();
@@ -346,7 +352,33 @@ class CN
     }
     return array($rows, $count);
   }
+
+  public function inserirTecnAltOS($Tec)
+  {
+    $dt = new DateTime("now", new DateTimeZone('America/Sao_Paulo'));
+    $dh = $dt->format('Y-m-d H:i:s');
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "INSERT INTO tecnico(idtecn, idos, nome, user, setor, datahora, status, laudo) VALUES(NULL, :idos, :nome, :user, :setor, :datahora, :status, :laudo)";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":idos", $Tec->idos, PDO::PARAM_INT);
+      $stmt->bindParam(":nome", $Tec->nome, PDO::PARAM_STR);
+      $stmt->bindParam(":user", $Tec->user, PDO::PARAM_STR);
+      $stmt->bindParam(":setor", $Tec->setor, PDO::PARAM_STR);
+      $stmt->bindParam(":datahora", $dh, PDO::PARAM_STR);
+      $stmt->bindParam(":status", $Tec->status, PDO::PARAM_STR);
+      $stmt->bindParam(":laudo", $Tec->laudo, PDO::PARAM_STR);
+      $stmt->execute();
+      $rows = $stmt->fetch(PDO::FETCH_ASSOC);
+      $count = $stmt->rowCount();
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
 }
-
-
 ?>
