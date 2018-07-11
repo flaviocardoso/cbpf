@@ -14,9 +14,13 @@ $count = 0;
 $rows1 = array();
 if(isset($user) and !empty($user))
 {
+  include_once("config/maining/path/OrderService.php");
+  $OS = new ClassOS();
+  $OS->user = $user;
+
   include_once("config/maining/path/CN.php");
   $PDO = new CN();
-  $rwc = $PDO->orderServicePorSolic($user);
+  $rwc = $PDO->orderServicePorSolic($OS);
   $rows1 = $rwc[0];
   $count = $rwc[1];
   if($count == 0)
