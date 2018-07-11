@@ -15,9 +15,13 @@ $rows1 = array();
 $count = 0;
 if(isset($setor) and !empty($setor))
 {
+  include_once("config/maining/path/OrderService.php");
+  $OS = new ClassOS();
+  $OS->setor = $setor;
+
   include_once("config/maining/path/CN.php");
   $PDO = new CN();
-  $rwc = $PDO->orderServicePorSetor($setor);
+  $rwc = $PDO->orderServicePorSetor($OS);
   $rows1 = $rwc[0];
   $count = $rwc[1];
   if($count == 0)
