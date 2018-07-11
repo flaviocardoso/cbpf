@@ -71,27 +71,49 @@ if(!empty($_POST['submit']))
   //$_SESSION["arq_tmp"] = $_FILES['arquivo']['tmp_name'];
   //$_SESSION["forders"] = $forderdh;
   }
+  include_once("config/maining/path/OrderService.php");
+  $OS = new ClassOS();
+  $OS->user = $user;
+  $OS->nos = $nos;
+  $OS->nome = $nome;
+  $OS->email = $email;
+  $OS->coord = $coord;
+  $OS->ala = $ala;
+  $OS->sala = $sala;
+  $OS->telefone = $telefone;
+  $OS->setor = $setor;
+  $OS->arq_name = $arq_name;
+  $OS->arq = $arq;
+  $OS->arq_type = $arq_type;
+  $OS->dh = $dh;
+  $OS->descr = $descr;
+
   include("config/maining/path/CN.php");
   $PDO = new CN();
-  $rwci1 = $PDO->inserirOS($user, $nos, $nome, $email, $coord, $ala, $sala, $telefone, $setor, $arq_name, $arq, $arq_type, $dh, $descr);
+  $rwci1 = $PDO->inserirOS($OS);
   $rowsi1 = $rwci1[0];
   $counti1 = $rwci1[1];
 
   if($counti1 > 0)
   {
-    $rwci2 = $PDO->orderServicePorNOS($nos);
+    $rwci2 = $PDO->orderServicePorNOS($OS);
     $rowsi2 = $rwci2[0];
     $counti2 = $rwci2[1];
 
     if($counti2 > 0)
     {
-      $status = "NOVA";
-      $rwci3 = $PDO->inserirTecnNOVAOS($rowsi2["idos"], $setor, $dh, $status);
+      include_once("config/maining/path/Tecnico.php");
+      $Tec = new ClassTecnico();
+      $Tec->idos = $rowsi2["idos"];
+      $Tec->setor = $setor;
+      $Tec->status = "NOVA";
+
+      $rwci3 = $PDO->inserirTecnNOVAOS($Tec);
       $counti3 = $rwci3[0];
       if($counti3 > 0){
         //header("Location: criarOS");
         include_once("config/maining/path/email.php");
-        //email de teste 
+        //email de teste
         $solic_email = "flavioc401@gmail.com";
         $solic_name = "Flavio Cardoso";
         $assunto = "Service OS CBPF";
