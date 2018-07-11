@@ -14,9 +14,13 @@ $mens = "";
 $rows1 = array();
 if(isset($coord) and !empty($coord))
 {
+  include_once("config/maining/path/OrderService.php");
+  $OS = new ClassOS();
+  $OS->coord = $coord;
+
   include_once("config/maining/path/CN.php");
   $PDO = new CN();
-  $rwc = $PDO->orderServicePorCoord($coord);
+  $rwc = $PDO->orderServicePorCoord($OS);
   $rows1 = $rwc[0];
   $count= $rwc[1];
   if($count == 0)
@@ -45,7 +49,9 @@ echo $_POST["hander"];
     <section>-->
       <? $mens ?>
       <form id="form_data" action="principal" method="post">
-        <input type="text" name="nome" id="nome"/>
+        Ano : <input type="text" name="ano" id="ano"/>
+        Mês : <input type="month" name="mes1" id="mes1"/> à
+              <input type="month" name="mes2" id="mes2"/>
         <input type="submit" id="submit" name="submit" value="Enviar"/>
       </form>
       <p></p>
