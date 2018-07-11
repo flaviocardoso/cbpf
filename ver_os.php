@@ -32,7 +32,16 @@ if(isset($_POST["submit"]))
   $nome = $_SESSION["nome"];
   $setor = $_SESSION["setor"];
 
-  $rwc4 = $PDO->inserirTecnAltOS($id, $nome, $user, $setor, $status, $laudo);
+  include_once("config/maining/path/Tecnico.php");
+  $Tec = new ClassTecnico();
+  $Tec->idos = $id;
+  $Tec->nome = $nome;
+  $Tec->user = $user;
+  $Tec->setor = $setor;
+  $Tec->status = $status;
+  $Tec->laudo = $laudo;
+
+  $rwc4 = $PDO->inserirTecnAltOS($Tec);
   $count4 = $rwc4[1];
   if ($count4 > 0)
   {
