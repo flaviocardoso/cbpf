@@ -8,19 +8,37 @@ if (!isset($_SESSION['user']) and !isset($coord)) {
     // Redireciona o visitante de volta pro login
     header("Location: login.php"); exit;
 }
+include_once("config/maining/path/biblio.php");
+
+$anoinicial = NULL;
+$mesinicial = NULL;
+$diainicial = NULL;
+
+if(isset($_POST["submit"]))
+{
+  echo $anoinicial = (int) entrada($_POST["anoinicial"]);
+  $mesinicial = entrada($_POST["mesinicial"]);
+  $diainicial = entrada($_POST["diainicial"]);
+}
 
 include_once("config/maining/path/biblio.php");
 $mens = "";
 $rows1 = array();
 if(isset($coord) and !empty($coord))
 {
+  include_once("config/maining/path/Consultas.php");
+  $CON = new ClassConsulta();
+  $CON->anoinicial = $anoinicial;
+  $CON->mesinicial = $mesinicial;
+  $CON->diainicial = $diainicial;
+
   include_once("config/maining/path/OrderService.php");
   $OS = new ClassOS();
   $OS->coord = $coord;
 
   include_once("config/maining/path/CN.php");
   $PDO = new CN();
-  $rwc = $PDO->orderServicePorCoord($OS);
+  $rwc = $PDO->orderServicePorCoord($OS, $CON);
   $rows1 = $rwc[0];
   $count= $rwc[1];
   if($count == 0)
@@ -49,9 +67,11 @@ echo $_POST["hander"];
     <section>-->
       <? $mens ?>
       <form id="form_data" action="principal" method="post">
-        Ano : <input type="text" name="ano" id="ano"/>
-        Mês : <input type="month" name="mes1" id="mes1"/> à
-              <input type="month" name="mes2" id="mes2"/>
+        <input
+        Data de Abertura da OS :
+        <input type="number" name="diainicial" placeholder="DIA"/>
+        <input type="number" name="mesinicial" placeholder="MES"/>
+        <input type="number" name="anoinicial" placeholder="ANO"/><br>
         <input type="submit" id="submit" name="submit" value="Enviar"/>
       </form>
       <p></p>
@@ -82,6 +102,7 @@ echo $_POST["hander"];
       e.preventDefault();
       var formData = new FormData($(this)[0]);
       formData.append("hander", "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>");
+      formData.append("submit", $('input[name="submit"]').val());
       $.ajax({
         url: "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>",
         type: "POST",
