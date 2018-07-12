@@ -93,15 +93,50 @@ class CN
     }
     return $flag;
   }
-
-  public function orderServicePorCoord($OS)
+/**
+* verifica cada coordenação
+**/
+  public function orderServicePorCoord($OS, $CON = NULL)
   {
     $rows = array();
     $count = 0;
     try{
-      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) WHERE os.coord=:coord";
+      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr,";
+      $sql .= " os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora)";
+      $sql .= " as hora, os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico,";
+      $sql .= " date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status,";
+      $sql .= " te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo";
+      $sql .= " FROM tecnico group by idos desc) te using(idos) WHERE os.coord=:coord";
+
+      if(!empty($CON->anoinicial))
+      {
+        $sql .= " AND YEAR(os.datahora)=:anoinicial";
+      }
+      if(!empty($CON->mesinicial))
+      {
+        $sql .= " AND MONTH(os.datahora)=:mesinicial";
+      }
+      if(!empty($CON->diainicial))
+      {
+        $sql .= " AND DAY(os.datahora)=:diainicial";
+      }
+
       $stmt = $this->link->prepare($sql);
       $stmt->bindParam(":coord", $OS->coord, PDO::PARAM_STR);
+
+      if(isset($CON->anoinicial))
+      {
+        $stmt->bindParam(":anoinicial", $CON->anoinicial, PDO::PARAM_INT);
+      }
+      if(isset($CON->mesinicial))
+      {
+        $stmt->bindParam(":mesinicial", $CON->mesinicial, PDO::PARAM_INT);
+      }
+      if(isset($CON->diainicial))
+      {
+        $stmt->bindParam(":diainicial", $CON->diainicial, PDO::PARAM_INT);
+      }
+
       $stmt->execute();
       $count = $stmt->rowCount();
       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -380,5 +415,7 @@ class CN
     }
     return array($rows, $count);
   }
+
+
 }
 ?>
