@@ -58,17 +58,23 @@ echo $_POST["hander"];
           if($count > 0)
           {
             foreach ($rows1 as $key => $value) {
-              echo "$value[descr]<br>";
-              echo "$value[data]<br>";
-              echo "$value[hora]<br>";
-              echo "$value[laudo]<br>";
-              echo "$value[data_ultima]<br>";
-              echo "$value[hora_ultima]<br>";
+              echo "<br>------------------<br>";
+              echo "Número de Os : $value[nos]<br>";
+              echo "Solicitante : $value[solicitante]<br>";
+              echo "Setor OS: " . setor($value["setor"]) . "<br>";
+              echo "Coordenação OS: $value[coord]<br>";
+              echo "Descrição : $value[descr]<br>";
+              echo "Data : $value[data]<br>";
+              echo "Hora : $value[hora]<br>";
+              echo "Tecnico Atual : $value[tecnico]<br>";
+              echo "Laudo : $value[laudo]<br>";
+              echo "Data Ultimo Laudo : $value[data_ultima]<br>";
+              echo "Hora Ultimo Laudo : $value[hora_ultima]<br>";
               if($value["arquivo"])
               {
                 echo "<a href=\"os/arquivo/$value[id]\" target=\"__blank__\">Aquivo</a><br>";
               }
-              echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
+              echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br><br>------------------<br>";
             }
           }
           ?>
