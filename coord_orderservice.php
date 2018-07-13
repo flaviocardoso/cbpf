@@ -10,15 +10,17 @@ if (!isset($_SESSION['user']) and !isset($coord)) {
 }
 include_once("config/maining/path/biblio.php");
 
-$anoinicial = NULL;
-$mesinicial = NULL;
-$diainicial = NULL;
+include_once("config/maining/path/Consultas.php");
+$CON = new ClassConsulta();
 
 if(isset($_POST["submit"]))
 {
-  echo $anoinicial = (int) entrada($_POST["anoinicial"]);
-  $mesinicial = entrada($_POST["mesinicial"]);
-  $diainicial = entrada($_POST["diainicial"]);
+  $CON->anoinicial = (!empty($_POST["anoinicial"])) ? entrada($_POST["anoinicial"]) : NULL;
+  $CON->mesinicial = (!empty($_POST["mesinicial"])) ? entrada($_POST["mesinicial"]) : NULL;
+  $CON->diainicial = (!empty($_POST["diainicial"])) ? entrada($_POST["diainicial"]) : NULL;
+  $CON->anofinal = (!empty($_POST["anofinal"])) ? entrada($_POST["anofinal"]) : NULL;
+  $CON->mesfinal = (!empty($_POST["mesfinal"])) ? entrada($_POST["mesfinal"]) : NULL;
+  $CON->diafinal = (!empty($_POST["diafinal"])) ? entrada($_POST["diafinal"]) : NULL;
 }
 
 include_once("config/maining/path/biblio.php");
@@ -26,12 +28,6 @@ $mens = "";
 $rows1 = array();
 if(isset($coord) and !empty($coord))
 {
-  include_once("config/maining/path/Consultas.php");
-  $CON = new ClassConsulta();
-  $CON->anoinicial = $anoinicial;
-  $CON->mesinicial = $mesinicial;
-  $CON->diainicial = $diainicial;
-
   include_once("config/maining/path/OrderService.php");
   $OS = new ClassOS();
   $OS->coord = $coord;
@@ -67,11 +63,14 @@ echo $_POST["hander"];
     <section>-->
       <? $mens ?>
       <form id="form_data" action="principal" method="post">
-        <input
         Data de Abertura da OS :
         <input type="number" name="diainicial" placeholder="DIA"/>
         <input type="number" name="mesinicial" placeholder="MES"/>
         <input type="number" name="anoinicial" placeholder="ANO"/><br>
+        Data do Ultimo laudo na OS :
+        <input type="number" name="diafinal" placeholder="DIA"/>
+        <input type="number" name="mesfinal" placeholder="MES"/>
+        <input type="number" name="anofinal" placeholder="ANO"/><br>
         <input type="submit" id="submit" name="submit" value="Enviar"/>
       </form>
       <p></p>
@@ -81,17 +80,23 @@ echo $_POST["hander"];
           {
             foreach ($rows1 as $key => $value) {
               //print_r($value);//ex.: $value['id']
-              echo "$value[descr]<br>";
-              echo "$value[data]<br>";
-              echo "$value[hora]<br>";
-              echo "$value[laudo]<br>";
-              echo "$value[data_ultima]<br>";
-              echo "$value[hora_ultima]<br>";
+              echo "<br>------------------<br>";
+              echo "Número de Os : $value[nos]<br>";
+              echo "Solicitante : $value[solicitante]<br>";
+              echo "Setor OS: " . setor($value["setor"]) . "<br>";
+              //echo "Coordenação OS: $value[coord]<br>";
+              echo "Descrição : $value[descr]<br>";
+              echo "Data : $value[data]<br>";
+              echo "Hora : $value[hora]<br>";
+              echo "Tecnico Atual : $value[tecnico]<br>";
+              echo "Laudo : $value[laudo]<br>";
+              echo "Data Ultimo Laudo : $value[data_ultima]<br>";
+              echo "Hora Ultimo Laudo : $value[hora_ultima]<br>";
               if($value["arquivo"])
               {
                 echo "<a href=\"os/arquivo/$value[id]\" target=\"__blank__\">Arquivo</a><br>";
               }
-              echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br>";
+              echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br><br>------------------<br>";
             }
           }
         ?>
