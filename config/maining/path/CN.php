@@ -104,9 +104,9 @@ class CN
       $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr,";
       $sql .= " os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora)";
       $sql .= " as hora, os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico,";
-      $sql .= " date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status,";
-      $sql .= " te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo";
-      $sql .= " FROM tecnico group by idos desc) te using(idos) WHERE os.coord=:coord";
+      $sql .= " date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo";
+      $sql .= " FROM orderservice os JOIN (SELECT idos, nome, user, setor, datahora, status, laudo FROM tecnico group by idos desc) te";
+      $sql .= " using(idos) WHERE os.coord=:coord";
 
       if(!empty($CON->anoinicial))
       {
@@ -119,6 +119,18 @@ class CN
       if(!empty($CON->diainicial))
       {
         $sql .= " AND DAY(os.datahora)=:diainicial";
+      }
+      if(!empty($CON->anofinal))
+      {
+        $sql .= " AND YEAR(te.datahora)=:anofinal";
+      }
+      if(!empty($CON->mesfinal))
+      {
+        $sql .= " AND MONTH(te.datahora)=:mesfinal";
+      }
+      if(!empty($CON->diafinal))
+      {
+        $sql .= " AND DAY(te.datahora)=:diafinal";
       }
 
       $stmt = $this->link->prepare($sql);
@@ -135,6 +147,18 @@ class CN
       if(isset($CON->diainicial))
       {
         $stmt->bindParam(":diainicial", $CON->diainicial, PDO::PARAM_INT);
+      }
+      if(isset($CON->anofinal))
+      {
+        $stmt->bindParam(":anofinal", $CON->anofinal, PDO::PARAM_INT);
+      }
+      if(isset($CON->mesfinal))
+      {
+        $stmt->bindParam(":mesfinal", $CON->mesfinal, PDO::PARAM_INT);
+      }
+      if(isset($CON->diafinal))
+      {
+        $stmt->bindParam(":diafinal", $CON->diafinal, PDO::PARAM_INT);
       }
 
       $stmt->execute();
@@ -208,11 +232,11 @@ class CN
     $count = 0;
     try
     {
-      $sql = "INSERT INTO tecnico(idtecn, idos, nome, user, setor, datahora, status, laudo) VALUES(NULL, :id, NULL, NULL, :setor, :datahora, :status, NULL)";
+      $sql = "INSERT INTO tecnico(idtecn, idos, nome, user, setor, datahora, status, laudo) VALUES(NULL, :id, NULL, NULL, :setor, NULL, :status, NULL)";
       $stmt = $this->link->prepare($sql);
-      $stmt->bindParam(':id', $Tec->id, PDO::PARAM_INT);
+      $stmt->bindParam(':id', $Tec->idos, PDO::PARAM_INT);
       $stmt->bindParam(':setor', $Tec->setor, PDO::PARAM_STR);
-      $stmt->bindParam(':datahora', $Tec->dh, PDO::PARAM_STR);
+      //$stmt->bindParam(':datahora', $Tec->dh, PDO::PARAM_STR);
       $stmt->bindParam(':status', $Tec->status, PDO::PARAM_STR);
       $stmt->execute();
       $count = $stmt->rowCount();
@@ -230,7 +254,13 @@ class CN
     $count = 0;
     try
     {
-      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where te.setor=:setor";
+      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, os.coord as coord, ";
+      $sql .= "date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora, os.arq_name as arqnome, ";
+      $sql .= "os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, ";
+      $sql .= "TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo ";
+      $sql .= "FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te ";
+      $sql .= "using(idos) where te.setor=:setor";
+
       $stmt = $this->link->prepare($sql);
       $stmt->bindParam(':setor', $OS->setor, PDO::PARAM_STR);
       $stmt->execute();
@@ -250,7 +280,14 @@ class CN
     $count = 0;
     try
     {
-      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora,  os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico, date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, te.status as status, te.laudo as laudo FROM orderservice os JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te using(idos) where os.user=:user";
+      $sql = "SELECT os.idos as id, os.nos as nos, os.nome as solicitante, os.descr as descr, os.setor as setor, ";
+      $sql .= "os.coord as coord, date_format(os.datahora, '%d/%m/%Y') as data, TIME(os.datahora) as hora,  ";
+      $sql .= "os.arq_name as arqnome, os.arq as arquivo, os.arq_type as arqtype, te.nome as tecnico, ";
+      $sql .= "date_format(te.datahora, '%d/%m/%Y') as data_ultima, TIME(te.datahora) as hora_ultima, ";
+      $sql .= "te.status as status, te.laudo as laudo FROM orderservice os ";
+      $sql .= "JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te ";
+      $sql .= "using(idos) where os.user=:user";
+      
       //$sql1 = "SELECT * FROM tecnico as JOIN orderservice as os using "
       $stmt = $this->link->prepare($sql);
       $stmt->bindParam(':user', $OS->user, PDO::PARAM_STR);
