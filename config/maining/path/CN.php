@@ -178,7 +178,7 @@ class CN
     $count = 0;
     try
     {
-      $sql = "select id, nome, email, telefone, setor, sala, coord, ala from usuario where user=:user";
+      $sql = "select id, nome, user, email, telefone, setor, sala, coord, ala from usuario where user=:user";
       $stmt = $this->link->prepare($sql);
       $stmt->bindParam(":user", $user, PDO::PARAM_STR);
       $stmt->execute();
