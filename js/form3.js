@@ -1,11 +1,20 @@
-var app = angular.module("myApp", ["ngRoute"]);
-app.config(function($routeProvider) {
-$routeProvider
-//.when("/criarOS", {templateUrl : "criarOS"})
-.when("/coordOS", {templateUrl : "coordOS"})
-.when("/setorOS", {templateUrl : "setorOS"})
-.when("/solicOS", {templateUrl : "solicOS"})
-.when("/tecnOS", {templateUrl : "tecnOS"});
+//gerenciar coordenadores #admin$ entrada suprimida para a página
+$('li#asrecoord').click(function(e) {
+  e.preventDefault();
+  $.post( "adminmainger", {hander: "adminmainger"})
+  .done(function( resp ) {
+    $('#content').html(resp);
+  });
+  return false;
+});
+//gerenciar usuarios por coordenação #coord$ entrada suprimida para a página
+$('li#yehdusers').click(function(e) {
+  e.preventDefault();
+  $.post( "coordmainger", {hander: "coordmainger"})
+  .done(function( resp ) {
+    $('#content').html(resp);
+  });
+  return false;
 });
 //criarOS
 $('li#criarOS').click(function(e) {
