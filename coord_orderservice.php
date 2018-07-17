@@ -46,88 +46,127 @@ if(isset($_POST["nome"]))
 {
   echo entrada($_POST["nome"]);
 }
-echo $_POST["hander"];
+//echo $_POST["hander"];
 ?>
-
-<!--<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width initial-scale=1 maximum-scale=1" name="viewport">
-    <title>Coordenação Ordem de Serviços</title>
-  </head>
-  <body>
-    <header>
-      <p>Seus Pedidos</p>
-    </header>
-    <section>-->
-      <? $mens ?>
-      <form id="form_data" action="principal" method="post">
-        Data de Abertura da OS :
-        <input type="number" name="diainicial" placeholder="DIA"/>
-        <input type="number" name="mesinicial" placeholder="MES"/>
-        <input type="number" name="anoinicial" placeholder="ANO"/><br>
-        Data do Ultimo laudo na OS :
-        <input type="number" name="diafinal" placeholder="DIA"/>
-        <input type="number" name="mesfinal" placeholder="MES"/>
-        <input type="number" name="anofinal" placeholder="ANO"/><br>
-        <input type="submit" id="submit" name="submit" value="Enviar"/>
-      </form>
-      <p></p>
-        <?php
-          //print_r($rows1);
-          if($count > 0)
-          {
-            foreach ($rows1 as $key => $value) {
-              //print_r($value);//ex.: $value['id']
-              echo "<br>------------------<br>";
-              echo "Número de Os : $value[nos]<br>";
-              echo "Solicitante : $value[solicitante]<br>";
-              echo "Setor OS: " . setor($value["setor"]) . "<br>";
-              //echo "Coordenação OS: $value[coord]<br>";
-              echo "Descrição : $value[descr]<br>";
-              echo "Data : $value[data]<br>";
-              echo "Hora : $value[hora]<br>";
-              echo "Tecnico Atual : $value[tecnico]<br>";
-              echo "Laudo : $value[laudo]<br>";
-              echo "Data Ultimo Laudo : $value[data_ultima]<br>";
-              echo "Hora Ultimo Laudo : $value[hora_ultima]<br>";
-              if($value["arquivo"])
-              {
-                echo "<a href=\"os/arquivo/$value[id]\" target=\"__blank__\">Arquivo</a><br>";
-              }
-              echo "<a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a><br><br>------------------<br>";
-            }
-          }
-        ?>
-    </div>
-    <script>
-    $("#form_data").submit(function(e)
+<? $mens ?>
+<div id="pesquisa">
+  <form id="form_data" action="principal" method="post">
+    Data de Abertura da OS :
+    <input type="number" name="diainicial" placeholder="DIA"/>
+    <input type="number" name="mesinicial" placeholder="MES"/>
+    <input type="number" name="anoinicial" placeholder="ANO"/><br>
+    Data do Ultimo laudo na OS :
+    <input type="number" name="diafinal" placeholder="DIA"/>
+    <input type="number" name="mesfinal" placeholder="MES"/>
+    <input type="number" name="anofinal" placeholder="ANO"/><br>
+    <input type="submit" id="submit" name="submit" value="Enviar"/>
+  </form>
+</div>
+<p></p>
+<div id="dados">
+  <?php
+    //print_r($rows1);
+    if($count > 0)
     {
-      e.preventDefault();
-      var formData = new FormData($(this)[0]);
-      formData.append("hander", "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>");
-      formData.append("submit", $('input[name="submit"]').val());
-      $.ajax({
-        url: "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>",
-        type: "POST",
-        data: formData,
-        success: function(response)
+      foreach ($rows1 as $key => $value)
+      {
+        //print_r($value);//ex.: $value['id']
+        echo "<div id='boxdata'>";
+        echo "  <div id='boxnos'>";
+        echo "    <div id='nos' title='Número de Ordem de Serviço'>" . $value["nos"] . "</div>";
+        echo "    <div id='setor' title='Setor da Ordem de Serviço'>" . setor($value["setor"]) . "</div>";
+        echo "    <div id='status' title='Status da Ordem de Serviço'>" . verStatus($value["status"]) . "</div>";
+        echo "  </div>";
+        echo "  <div id='boxtodo'>";
+        echo "    <div id='boxsolic'>";
+        echo "      <div id='solic' title='Solicitante'>" . $value["solicitante"] . "</div>";
+        //echo "Coordenação OS: $value[coord]<br>";
+        echo "      <div id='boxdate'>";
+        echo "         <div id='data-os' title='Data de criação da Ordem de Serviço'>" . $value["data"] . "</div>";
+        echo "         <div id='hora-os' title='Hora  de criação da Ordem de Serviço'>" . $value["hora"] . "</div>";
+        echo "      </div>";
+        //echo "      <div id='descr' title='Descrição da Ordem de Serviço'>" . $value["descr"] . "</div>";
+        echo "      <div id='descr'><span>Descrição (Passe o Mouve)</span>";
+        echo "        <div class='dropdown-content' title='Descrição da Ordem de Serviço'>" . $value["descr"] . "</div>";
+        echo "      </div>";
+        echo "    </div>";
+        echo "    <div id='boxtecn'>";
+        if($value["tecnico"])
         {
-          $('#content').html(response);
-        },
-        error: function(xhr, status, error)
+          echo "      <div id='tecn' title='Tecnico no momento'>" . $value["tecnico"] . "</div>";
+        }else {
+          echo "      <div id='tecn' title='Tecnico no momento'>Sem Tecnico</div>";
+        }
+
+        if($value["data_ultima"])
         {
-          alert(xhr.responseText);
-        },
-        async: false,
-        cache: false,
-        contentType: false,
-        processData: false
-      });
-      return false;
+          echo "      <div id='boxdate'>";
+          echo "         <div id='data-os' title='Data do último laudo'>" . $value["data_ultima"] . "</div>";
+          echo "         <div id='hora-os' title='Hora do último laudo'>" . $value["hora_ultima"] . "</div>";
+          echo "      </div>";
+        }else {
+          echo "      <div id='boxdate'>";
+          echo "         <div id='data-os' title='Data do último laudo'>Sem Data</div>";
+          echo "         <div id='hora-os' title='Hora do último laudo'>Sem Hora</div>";
+          echo "      </div>";
+        }
+        if($value["laudo"])
+        {
+          //echo "      <div id='laudo' title='Laudo'>" . $value["laudo"] . "</div>";
+          echo "      <div id='laudo'><span>Laudo (Passe o Mouve)</span>";
+          echo "        <div class='dropdown-content' title='Laudo da Ordem de Serviço'>" . $value["laudo"] . "</div>";
+          echo "      </div>";
+        }else {
+          //echo "      <div id='laudo' title='Laudo'>Sem Laudo </div>";
+          echo "      <div id='laudo'><span>Laudo (Passe o Mouve)</span>";
+          echo "        <div class='dropdown-content' title='Laudo da Ordem de Serviço'>Sem Laudo</div>";
+          echo "      </div>";
+        }
+        echo "   </div>";
+        echo "   <div id='box-acesso'>";
+        if($value["arquivo"])
+        {
+          echo "      <div id='id-arquivo'>";
+          echo "         <a href=\"os/arquivo/$value[id]\" target=\"__blank__\">Arquivo</a>";
+          echo "      </div>";
+        }
+        echo "      <div id='id-acess'>";
+        echo "         <a href=\"os/$value[id]\" target=\"__blank__\">Acessar</a>";
+        echo "      </div>";
+        echo "      <div id='id-edit'>";
+        echo "        ";
+        echo "      </div>";
+        echo "   </div>";
+        echo " </div>";
+        echo "</div>";
+      }
+    }
+  ?>
+</div>
+<script>
+  $("#form_data").submit(function(e)
+  {
+    e.preventDefault();
+    var formData = new FormData($(this)[0]);
+    formData.append("hander", "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>");
+    formData.append("submit", $('input[name="submit"]').val());
+    $.ajax({
+      url: "<? if(isset($_POST['hander'])) echo $_POST['hander']; ?>",
+      type: "POST",
+      data: formData,
+      success: function(response)
+      {
+        $('#content').html(response);
+      },
+      error: function(xhr, status, error)
+      {
+        alert(xhr.responseText);
+      },
+      async: false,
+      cache: false,
+      contentType: false,
+      processData: false
     });
-    </script>
-<!--
-  </body>
-</html>-->
+    return false;
+  });
+</script>
