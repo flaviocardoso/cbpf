@@ -96,3 +96,29 @@ function verfFlag($flag)
       break;
   }
 }
+
+function verStatus($status)
+{
+  $s;
+  switch ($status) {
+    case 'NOVA':
+      $s = 'Nova';
+      break;
+    case 'CANCE':
+      $s = 'Cancelada';
+      break;
+    case 'ANDA':
+      $s = 'Andamento';
+      break;
+    case 'MATE':
+      $s = 'Material';
+      break;
+    case 'CONT':
+      $s = 'Contato';
+      break;
+    case 'ENCE':
+      $s = 'Encerrada';
+      break;
+  }
+  return $s;
+}
