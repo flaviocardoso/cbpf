@@ -206,7 +206,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
             </fieldset>
             <fieldset>
               <legend>Setor de destinação</legend>
-              <select name="setor" id="setor" required>
+              <select name="setor" id="setoros" required>
                 <option value=""></option>
                 <option value="comp">Computação</option>
                 <option value="elet">Eletrônica</option>
@@ -223,7 +223,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
           </fieldset>
           <fieldset>
             <legend>Descrição do serviço</legend>
-            <textarea id="descr" name="descr" cols="30" rows="10" form="form_os" required></textarea><br/><br/>
+            <textarea id="descros" name="descr" cols="30" rows="10" form="form_os" required></textarea><br/><br/>
             <input type="submit" id="submit" name="submit" form="form_os" value="Enviar"/>
             <!--<button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>-->
           </fieldset>
