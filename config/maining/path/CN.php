@@ -287,7 +287,7 @@ class CN
       $sql .= "te.status as status, te.laudo as laudo FROM orderservice os ";
       $sql .= "JOIN (SELECT idos, nome, setor, datahora, status, laudo FROM tecnico group by idos desc) te ";
       $sql .= "using(idos) where os.user=:user";
-      
+
       //$sql1 = "SELECT * FROM tecnico as JOIN orderservice as os using "
       $stmt = $this->link->prepare($sql);
       $stmt->bindParam(':user', $OS->user, PDO::PARAM_STR);
@@ -453,6 +453,46 @@ class CN
     return array($rows, $count);
   }
 
+  public function buscarSetorPorCoord($coord)
+  {
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT setor FROM usuario WHERE coord=:coord GROUP BY setor";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":coord", $coord, PDO::PARAM_STR);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+    return array($rows, $count);
+  }
+
+  public function buscarUserPorSetor($setor)
+  {
+    $rows = array();
+    $count = 0;
+    try
+    {
+      $sql = "SELECT user FROM usuario WHERE setor=:setor";
+      $stmt = $this->link->prepare($sql);
+      $stmt->bindParam(":setor", $setor, PDO::PARAM_STR);
+      $stmt->execute();
+      $count = $stmt->rowCount();
+      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    catch (PDOException $e)
+    {
+      print 'ERRO' . $e->getMessage();
+    }
+
+    return array($rows, $count);
+  }
 
 }
 ?>
