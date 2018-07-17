@@ -45,13 +45,16 @@
           #laudo:hover .dropdown-content {display: block; }
           #nav .dropdown-content {display: block; }
           body {margin: 0px;}
-          section {display: flex;}
+          header {position: fixed;top: 0px;border: 1px solid;width: 100%;z-index: 1;background: blue;}
+          #welcome {display: flex;}
+          #para {flex: 21}
+          #saida {text-align: center;flex: 1}
+          section {background: #f9f9f9;margin-top: 64px; display: flex;}
           nav {margin-left: 8px; position: fixed;}
           article {margin-left: 275px; -webkit-flex: 5; -ms-flex-glow: 5; flex: : 5;}
           footer {text-align: center; bottom: 0; position: relative;}
-          ul { list-style-type: none; padding-left: 0px; width: 250px; margin-right: 16px; margin-top: 0px;}
-          li{ cursor: pointer; padding-top: 10px; padding-bottom: 10px; border: 1px solid black; border-radius: 10px;
-    text-align: center; margin-bottom: 3px;}
+          ul { border-radius: 5px; background: #e9e9f3;list-style-type: none; padding-left: 0px; width: 250px; margin-right: 16px; margin-top: 0px;}
+          li{ cursor: pointer; padding-top: 10px; padding-bottom: 10px; border: 1px solid black; border-radius: 10px; text-align: center; margin-bottom: 3px;}
           li:hover {background: yellow;}
           /*#content {height: 490px;}*/
           #pesquisa {border: 1px solid black; border-radius: 3px;}
@@ -75,13 +78,21 @@
           #id-edit {text-align: center;}
           #id-arquivo {text-align: center;}
           #id-acess {text-align: center;}
+          #setorSolic {margin-right: 10px;}
+          #userSolic {margin-right: 10px;}
           /*footer {border: 1px solid black; position: relative;bottom: 0px;}*/
         </style>
     </head>
     <body>
       <header>
-        <p>Bem vindo, <? echo $_SESSION["nome"];?></p>
-        <? echo $linkLogout; ?>
+        <div id="welcome">
+          <div id="para">
+            <p>Bem vindo, <? echo $_SESSION["nome"];?></p>
+          </div>
+          <div id="saida">
+            <? echo $linkLogout; ?>
+          </div>
+        </div>
       </header>
       <section>
           <nav>
