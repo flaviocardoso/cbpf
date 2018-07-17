@@ -12,6 +12,8 @@ if (!isset($_SESSION['user'])) {
 include_once("config/maining/path/biblio.php");
 //var_dump($_FILES);
 
+$coord = $_SESSION["coord"];
+
 $mensErroArq = "";
 $mensErro = "";
 $mensOS = "";
@@ -73,7 +75,7 @@ if(!empty($_POST['submit']))
   }
   include_once("config/maining/path/OrderService.php");
   $OS = new ClassOS();
-  $OS->user = $user;
+  $OS->user = $_POST["user"];//$user;
   $OS->nos = $nos;
   $OS->nome = $nome;
   $OS->email = $email;
@@ -131,6 +133,42 @@ if(!empty($_POST['submit']))
   }
 }
 
+include_once("config/maining/path/CN.php");
+$PDO = new CN();
+$rwcsetor = $PDO->buscarSetorPorCoord($coord);
+$rowsSetor = $rwcsetor[0];
+$countSetor = $rwcsetor[1];
+//echo $coord;
+
+
+if(!empty($_POST["setorSubmit"])){
+  //echo $_POST["setorSubmit"];
+  $solicSetor = $_POST["setorSolic"];
+  $rwcusers = $PDO->buscarUserPorSetor($solicSetor);
+  $rowsUsers = $rwcusers[0];
+  $countUsers = $rwcusers[1];
+}
+
+if(!empty($_POST["userSubmit"])){
+  //echo $_POST["userSubmit"];
+  //echo $_POST["userSolic"];
+  $mens = "";
+  $rows1 = array();
+  $count = 0;
+  if(isset($_POST["userSolic"]) and !empty($_POST["userSolic"]))
+  {
+    include_once("config/maining/path/CN.php");
+    $PDO = new CN();
+    $rwc = $PDO->consultaUser($_POST["userSolic"]);
+    $rows1 = $rwc[0];
+    $count = $rwc[1];
+    if($count == 0)
+    {
+      $mens = "<p>Não encontrado</p>";
+    }
+  }
+}
+/*
 $mens = "";
 $rows1 = array();
 $count = 0;
@@ -146,7 +184,7 @@ if(isset($user) and !empty($user))
     $mens = "<p>Não encontrado</p>";
   }
 }
-/*
+
 $sql = "select id, nome, email, telefone, setor, sala, coord, ala from usuario where user=:user";
 $stmt = $PDO->prepare($sql);
 $stmt->bindParam(":user", $user. PDO::PARAM_STR);
@@ -157,116 +195,153 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 //var_dump($_POST);
 //var_dump($_FILES);
 ?>
-<!--
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta content="width=device-width initial-scale=1 maximum-scale=1" name="viewport">
-    <title>Criar ordem de serviço</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  </head>
-  <body>
-    <header>
-      <p>Criando a ordem de serviço</p>
-    </header>-->
-    <? echo $mensErroArq; ?>
-    <? echo $mensErro; ?>
-    <? echo $mensOS; ?>
-    <? echo $mens; ?>
-    <? //echo $_FILES["arquivo"]["name"]; ?>
-      <form id="form_os" method="post" action="principal">
+<? echo $mensErroArq; ?>
+<? echo $mensErro; ?>
+<? echo $mensOS; ?>
+<? //echo $mens; ?>
+<? //echo $_FILES["arquivo"]["name"]; ?>
+<form id="solicitSever" method="post" action="principal">
+  <fieldset>
+    <legend>Incluir solicitante</legend>
+    Incluir setor :
+    <select name="setorSolic" id="setorSolic">
+      <option value=""></option>
+      <?
+        foreach ($rowsSetor as $key => $value) {
+          echo "<option value='$value[setor]'>" . setor($value["setor"]) . "</option>";
+        }
+      ?>
+    </section>
+    <input type="submit" name="setorSubmit" value="Procurar usuários"/><br/><br/>
+    Incluir usuario :
+    <select name="userSolic" id="userSolic">
+      <option value=""></option>
+      <?
+        foreach ($rowsUsers as $key => $value) {
+          echo "<option value='$value[user]'>" . $value["user"] . "</option>";
+        }
+      ?>
+    </section>
+    <input type="submit" name="userSubmit" value="Inserir usuario"/>
+  </fieldset>
+</form>
+<br>
+<form id="form_os" method="post" action="principal">
+  <fieldset>
+    <legend>Criando Ordem de Serviço</legend>
+    <fieldset>
+      <legend>Dados do solicitante</legend>
         <fieldset>
-          <legend>Criando Ordem de Serviço</legend>
-           <fieldset>
-            <legend>Dados do solicitante</legend>
-            <fieldset>
-              <legend>Solicitante</legend>
-              <input id="nome" type="text" name="nome" value="<?php echo $rows1["nome"]; ?>" required/>
-            </fieldset>
-            <fieldset>
-              <legend>Email</legend>
-              <input id="email"  type="text" name="email" value="<?php echo $rows1["email"]; ?>" required/>
-            </fieldset>
-            <fieldset>
-              <legend>Coordenação</legend>
-              <input id="coord" type="text" name="coord" value="<?php echo $rows1["coord"]; ?>" required/>
-            </fieldset>
-            <fieldset>
-              <legend>Ala</legend>
-              <input id="ala" type="text" name="ala" value="<?php echo $rows1["ala"]; ?>" required/>
-            </fieldset>
-            <fieldset>
-              <legend>Sala</legend>
-              <input id="sala" type="text" name="sala" value="<?php echo $rows1["sala"]; ?>" required/>
-            </fieldset>
-            <fieldset>
-              <legend>Telefone</legend>
-              <input id="telefone" type="tel" name="telefone" value="<?php echo $rows1['telefone']; ?>" required/>
-            </fieldset>
-            <fieldset>
-              <legend>Setor de destinação</legend>
-              <select name="setor" id="setoros" required>
-                <option value=""></option>
-                <option value="comp">Computação</option>
-                <option value="elet">Eletrônica</option>
-                <option value="meca">Mecânica</option>
-                <option value="marc">Marcearia</option>
-                <option value="vidr">Vidro</option>
-                <option value="webi">Web Institucional</option>
-                <option value="segu">Segurança de Rede</option>
-              </select>
-          </fieldset>
-          <fieldset>
-            <legend>Enviar arquivo</legend>
-            <input type="file" name="arquivo" id="arquivo"/>
-          </fieldset>
-          <fieldset>
-            <legend>Descrição do serviço</legend>
-            <textarea id="descros" name="descr" cols="30" rows="10" form="form_os" required></textarea><br/><br/>
-            <input type="submit" id="submit" name="submit" form="form_os" value="Enviar"/>
-            <!--<button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>-->
-          </fieldset>
+          <legend>Solicitante</legend>
+          <input id="user" type="hidden" name="user" value="<?php if(isset($rows1["user"])) {echo $rows1["user"];} ?>" required/>
+          <input id="nome" type="text" name="nome" value="<?php if(isset($rows1["nome"])) {echo $rows1["nome"];} ?>" required/>
+        </fieldset>
+        <fieldset>
+          <legend>Email</legend>
+          <input id="email"  type="text" name="email" value="<?php if(isset($rows1["email"])) {echo $rows1["email"];} ?>" required/>
+        </fieldset>
+        <fieldset>
+          <legend>Coordenação</legend>
+          <input id="coord" type="text" name="coord" value="<?php if(isset($rows1["coord"])) {echo $rows1["coord"];} ?>" required/>
+        </fieldset>
+        <fieldset>
+          <legend>Ala</legend>
+          <input id="ala" type="text" name="ala" value="<?php if(isset($rows1["ala"])) {echo $rows1["ala"];} ?>" required/>
+        </fieldset>
+        <fieldset>
+          <legend>Sala</legend>
+          <input id="sala" type="text" name="sala" value="<?php if(isset($rows1["sala"])) {echo $rows1["sala"];} ?>" required/>
+        </fieldset>
+        <fieldset>
+          <legend>Telefone</legend>
+          <input id="telefone" type="tel" name="telefone" value="<?php if(isset($rows1['telefone'])) {echo $rows1['telefone'];} ?>" required/>
+        </fieldset>
+        <fieldset>
+          <legend>Setor de destinação</legend>
+          <select name="setor" id="setoros" required>
+            <option value=""></option>
+            <option value="comp">Computação</option>
+            <option value="elet">Eletrônica</option>
+            <option value="meca">Mecânica</option>
+            <option value="marc">Marcearia</option>
+            <option value="vidr">Vidro</option>
+            <option value="webi">Web Institucional</option>
+            <option value="segu">Segurança de Rede</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <legend>Enviar arquivo</legend>
+          <input type="file" name="arquivo" id="arquivo"/>
+        </fieldset>
+        <fieldset>
+          <legend>Descrição do serviço</legend>
+          <textarea id="descros" name="descr" cols="30" rows="10" form="form_os" required></textarea><br/><br/>
+          <input type="submit" id="submit" name="submit" form="form_os" value="Enviar"/>
+          <!--<button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>-->
         </fieldset>
       </fieldset>
-      </form>
-      <script>
-      $('#form_os').submit(function(e) {
-        e.preventDefault();
-        //const nome = $('input[name="nome"]').val();
-        //const email = $('#email').val();
-        //const coord = $('#coord').val();
-        //const ala = $('#ala').val();
-        //const sala = $('#sala').val();
-        //const telefone = $('#telefone').val();
-        //const setor = $('#setor').val();
-        //const arquivo = $('#arquivo').val();
-        //{submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, telefone: telefone, setor: setor, descr: descr},
-        var formData = new FormData($(this)[0]);
-        //const descr = $('#descr').val();
-        const submit = $('input[name="submit"]').val();
-        formData.append("submit", submit);
-        //var formData = new FormData(this);
-        $.ajax({
-            url: 'criarOS', // caminho para o script que vai processar os dados
-            type: 'POST',
-            data: formData,
-            //contentType: false,
-            //processData: false,
-            //data: {submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, arquivo: arquivo, telefone: telefone, setor: setor, descr: descr},
-
-            success: function(response) {
-                $('#content').html(response);
-            },
-            error: function(xhr, status, error) {
-                alert(xhr.responseText);
-            },
-            cache: false,
-            contentType: false,
-            processData: false
-        });
-        return false;
-      });
-      </script>
-<!--  </body>
-</html>-->
+    </fieldset>
+</form>
+<script>
+  $('#form_os').submit(function(e) {
+    e.preventDefault();
+    //const nome = $('input[name="nome"]').val();
+    //const email = $('#email').val();
+    //const coord = $('#coord').val();
+    //const ala = $('#ala').val();
+    //const sala = $('#sala').val();
+    //const telefone = $('#telefone').val();
+    //const setor = $('#setor').val();
+    //const arquivo = $('#arquivo').val();
+    //{submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, telefone: telefone, setor: setor, descr: descr},
+    var formData = new FormData($(this)[0]);
+    //const descr = $('#descr').val();
+    const submit = $('input[name="submit"]').val();
+    formData.append("submit", submit);
+    //var formData = new FormData(this);
+    $.ajax({
+        url: 'criarOS', // caminho para o script que vai processar os dados
+        type: 'POST',
+        data: formData,
+        //contentType: false,
+        //processData: false,
+        //data: {submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, arquivo: arquivo, telefone: telefone, setor: setor, descr: descr},
+        success: function(response) {
+            $('#content').html(response);
+        },
+        error: function(xhr, status, error) {
+            alert(xhr.responseText);
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+    return false;
+  });
+  $('#solicitSever').submit(function(e)
+  {
+    e.preventDefault();
+    var formData = new FormData($(this)[0]);
+    const setorSubmit = $('input[name="setorSubmit"]').val();
+    const userSubmit = $('input[name="userSubmit"]').val();
+    formData.append("setorSubmit", setorSubmit);
+    formData.append("userSubmit", setorSubmit);
+    $.ajax({
+      url: 'criarOS', // caminho para o script que vai processar os dados
+      type: 'POST',
+      data: formData,
+      //contentType: false,
+      //processData: false,
+      //data: {submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, arquivo: arquivo, telefone: telefone, setor: setor, descr: descr},
+      success: function(response) {
+          $('#content').html(response);
+      },
+      error: function(xhr, status, error) {
+          alert(xhr.responseText);
+      },
+      cache: false,
+      contentType: false,
+      processData: false
+    });
+  });
+</script>
