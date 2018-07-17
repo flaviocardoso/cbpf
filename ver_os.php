@@ -150,7 +150,7 @@ if($result3 > 0){
                 <option value="CANCE">Canceladas</option>
                 <option value="ANDA">Andamento</option>
                 <option value="MATE">Em Espera de Material</option>
-                <option value="CONT">EM Espera de Contado</option>
+                <option value="CONT">EM Espera de Contato</option>
                 <option value="ENCE">Encerrada</option>
               </select>
               <div id="bot">
