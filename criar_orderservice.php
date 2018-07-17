@@ -23,6 +23,7 @@ $mensOS = "";
 if(!empty($_POST['submit']))
 {
   //echo "string2";
+  $user = entrada($_POST["user"]);
   $nome = entrada($_POST["nome"]);
   $email = entrada($_POST["email"]);
   $coord = entrada($_POST["coord"]);
@@ -66,16 +67,10 @@ if(!empty($_POST['submit']))
       var_dump($_FILES["arquivo"]);
       exit;
     }
-  //$forder = $forderdh;
-  //$path = $path . $forderdh;
-  //$arq = $path . $_FILES['arquivo']['name'];
-  //$_SESSION["arq_name"] = $arq;
-  //$_SESSION["arq_tmp"] = $_FILES['arquivo']['tmp_name'];
-  //$_SESSION["forders"] = $forderdh;
   }
   include_once("config/maining/path/OrderService.php");
   $OS = new ClassOS();
-  $OS->user = $_POST["user"];//$user;
+  $OS->user = $user;
   $OS->nos = $nos;
   $OS->nome = $nome;
   $OS->email = $email;
@@ -168,38 +163,10 @@ if(!empty($_POST["userSubmit"])){
     }
   }
 }
-/*
-$mens = "";
-$rows1 = array();
-$count = 0;
-if(isset($user) and !empty($user))
-{
-  include_once("config/maining/path/CN.php");
-  $PDO = new CN();
-  $rwc = $PDO->consultaUser($user);
-  $rows1 = $rwc[0];
-  $count = $rwc[1];
-  if($count == 0)
-  {
-    $mens = "<p>Não encontrado</p>";
-  }
-}
-
-$sql = "select id, nome, email, telefone, setor, sala, coord, ala from usuario where user=:user";
-$stmt = $PDO->prepare($sql);
-$stmt->bindParam(":user", $user. PDO::PARAM_STR);
-$stmt->execute();
-$count = $stmt->rowCount();
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
-*/
-//var_dump($_POST);
-//var_dump($_FILES);
 ?>
 <? echo $mensErroArq; ?>
 <? echo $mensErro; ?>
 <? echo $mensOS; ?>
-<? //echo $mens; ?>
-<? //echo $_FILES["arquivo"]["name"]; ?>
 <form id="solicitSever" method="post" action="principal">
   <fieldset>
     <legend>Incluir solicitante</legend>
@@ -208,7 +175,11 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
       <option value=""></option>
       <?
         foreach ($rowsSetor as $key => $value) {
-          echo "<option value='$value[setor]'>" . setor($value["setor"]) . "</option>";
+          if(!empty($_POST["setorSolic"]) && ($_POST["setorSolic"] == $value["setor"]) ) {
+            echo "<option value='$value[setor]' selected>" . setor($value["setor"]) . "</option>";
+          }else{
+            echo "<option value='$value[setor]' >" . setor($value["setor"]) . "</option>";
+          }
         }
       ?>
     </section>
@@ -218,7 +189,7 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
       <option value=""></option>
       <?
         foreach ($rowsUsers as $key => $value) {
-          echo "<option value='$value[user]'>" . $value["user"] . "</option>";
+          echo "<option value='$value[user]' >" . $value["user"] . "</option>";
         }
       ?>
     </section>
@@ -277,7 +248,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
           <legend>Descrição do serviço</legend>
           <textarea id="descros" name="descr" cols="30" rows="10" form="form_os" required></textarea><br/><br/>
           <input type="submit" id="submit" name="submit" form="form_os" value="Enviar"/>
-          <!--<button type="submit" formaction="cancelar_orderservice.php">Cancelar</button>-->
         </fieldset>
       </fieldset>
     </fieldset>
@@ -285,27 +255,13 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
 <script>
   $('#form_os').submit(function(e) {
     e.preventDefault();
-    //const nome = $('input[name="nome"]').val();
-    //const email = $('#email').val();
-    //const coord = $('#coord').val();
-    //const ala = $('#ala').val();
-    //const sala = $('#sala').val();
-    //const telefone = $('#telefone').val();
-    //const setor = $('#setor').val();
-    //const arquivo = $('#arquivo').val();
-    //{submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, telefone: telefone, setor: setor, descr: descr},
     var formData = new FormData($(this)[0]);
-    //const descr = $('#descr').val();
     const submit = $('input[name="submit"]').val();
     formData.append("submit", submit);
-    //var formData = new FormData(this);
     $.ajax({
         url: 'criarOS', // caminho para o script que vai processar os dados
         type: 'POST',
         data: formData,
-        //contentType: false,
-        //processData: false,
-        //data: {submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, arquivo: arquivo, telefone: telefone, setor: setor, descr: descr},
         success: function(response) {
             $('#content').html(response);
         },
@@ -330,9 +286,6 @@ $row = $stmt->fetch(PDO::FETCH_ASSOC);
       url: 'criarOS', // caminho para o script que vai processar os dados
       type: 'POST',
       data: formData,
-      //contentType: false,
-      //processData: false,
-      //data: {submit: submit, nome: nome, email: email, coord: coord, ala: ala, sala: sala, arquivo: arquivo, telefone: telefone, setor: setor, descr: descr},
       success: function(response) {
           $('#content').html(response);
       },
