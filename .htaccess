@@ -1,6 +1,7 @@
-Order Deny,Allow
-Deny from all
-Allow from 127.0.0.1
+#Options -Indexes
+#Order Deny,Allow
+#Deny from all
+#Allow from cbpf
 <FilesMatch ".*\.(css|js|php)$">
   Order Allow,Deny
   Allow from all
@@ -26,6 +27,14 @@ Allow from 127.0.0.1
   Order Allow,Deny
   Allow from all
 </FilesMatch>
+<FilesMatch "adminmainger">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
+<FilesMatch "coordmainger">
+  Order Allow,Deny
+  Allow from all
+</FilesMatch>
 <FilesMatch "testes$">
   Order Allow,Deny
   Allow from all
@@ -34,7 +43,15 @@ Allow from 127.0.0.1
   Order Deny,Allow
   Deny from all
 </Files>
-Options -Indexes
+<Files CNADMIN.php>
+  Order Deny,Allow
+  Deny from all
+</Files>
+<Files CNCOORD.php>
+  Order Deny,Allow
+  Deny from all
+</Files>
+
 Options FollowSymLinks
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -48,6 +65,8 @@ RewriteRule ^coordOS coord_orderservice.php
 RewriteRule ^setorOS orderserviceporsetor.php
 RewriteRule ^solicOS solicitante_orderservices.php
 RewriteRule ^tecnOS tecnico_orderservices.php
+RewriteRule ^adminmainger adminf/path/onwer/admin/admin.php
+RewriteRule ^coordmainger coordf/path/onwer/coord/coord.php
 RewriteRule ^os/stylesheet/screen.css$ stylesheet/screen.css
 RewriteRule ^os/js/animation.js$ js/animation.js
 RewriteRule ^os/([0-9]+)$ ver_os.php?id=$1 [QSA,NC,L]
